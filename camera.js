@@ -17,11 +17,12 @@ import * as boySVG from './resources/illustration/boy.svg';
 import * as abstractSVG from './resources/illustration/abstract.svg';
 import * as blathersSVG from './resources/illustration/blathers.svg';
 import * as tomNookSVG from './resources/illustration/tom-nook.svg';
+import { loadMtcnnModel } from 'face-api.js';
 
 // Camera stream video element
 let video;
-let videoWidth = 300;
-let videoHeight = 300;
+let videoWidth = 640;
+let videoHeight = 480;
 
 // Canvas
 let faceDetection = null;
@@ -102,78 +103,80 @@ const guiState = {
 
 
 //Model variables
-// let video;
-// let poseNet;
-// let pose;
-// let skeleton;
-
-// let brain;
-// let poseLabel = "Nothing yet!";
+let poseNet;
+let pose;
+let brain;
+let skeleton;
+let poseLabel = "Nothing yet!";
 
 
-// function draw() {
-//       document.getElementById("image-label").innerHTML = poseLabel;
-// }
+function draw() {
+      document.getElementById("image-label").innerHTML = poseLabel;
+}
 
-// function setup() {
-//   video = createCapture(VIDEO);
-//   video.hide();
-//   // poseNet = ml5.poseNet(video, modelLoaded);
-//   // poseNet.on('pose', gotPoses);
+function setupModel() {
+  console.log('Setting up!');
+  poseNet = ml5.poseNet(video, modelLoaded);
+  poseNet.on('pose', gotPoses);
+}
 
-//   let options = {
-//     inputs: 34,
-//     outputs: 4,
-//     task: 'classification',
-//     debug: true
-//   }
-//   brain = ml5.neuralNetwork(options);
-//   const modelInfo = {
-//     model: 'model/model.json',
-//     metadata: 'model/model_meta.json',
-//     weights: 'model/model.weights.bin',
-//   };
-//   brain.load(modelInfo, brainLoaded);
-// }
+function loadModel() {
+  let options = {
+    inputs: 34,
+    outputs: 4,
+    task: 'classification',
+    debug: true
+  }
+  brain = ml5.neuralNetwork(options);
+  const modelInfo = {
+    model: 'model/model.json',
+    metadata: 'model/model_meta.json',
+    weights: 'model/model.weights.bin'
+  };
+  brain.load(modelInfo, brainLoaded);
+}
 
-// function brainLoaded() {
-//   console.log('pose classification ready!');
-//   classifyPose();
-// }
+function brainLoaded() {
+  console.log('pose classification ready!');
+  classifyPose();
+}
 
-// function classifyPose() {
-//   if (pose) {
-//     let inputs = [];
-//     for (let i = 0; i < pose.keypoints.length; i++) {
-//       let x = pose.keypoints[i].position.x;
-//       let y = pose.keypoints[i].position.y;
-//       inputs.push(x);
-//       inputs.push(y);
-//     }
-//     brain.classify(inputs, gotResult);
-//   } else {
-//     setTimeout(classifyPose, 100);
-//   }
-// }
+function classifyPose() {
+  console.log('Classify pose');
+  if (pose) {
+    let inputs = [];
+    for (let i = 0; i < pose.keypoints.length; i++) {
+      let x = pose.keypoints[i].position.x;
+      let y = pose.keypoints[i].position.y;
+      inputs.push(x);
+      inputs.push(y);
+    }
+    brain.classify(inputs, gotResult);
+  } else {
+    setTimeout(classifyPose, 100);
+  }
+}
 
-// function gotResult(error, results) {  
-//   if (results[0].confidence > 0.75) {
-//     poseLabel = results[0].label.toUpperCase();
-//   }
-//   //console.log(results[0].confidence);
-//   classifyPose();
-// }
+function gotResult(error, results) { 
+  console.log('result'); 
+  if (results[0].confidence > 0.75) {
+    poseLabel = results[0].label.toUpperCase();
+  }
+  //console.log(results[0].confidence);
+  classifyPose();
+}
 
-// function gotPoses(poses) {
-//   if (poses.length > 0) {
-//     pose = poses[0].pose;
-//     skeleton = poses[0].skeleton;
-//   }
-// }
+function gotPoses(poses) {
+  console.log('got poses');
+  if (poses.length > 0) {
+    pose = poses[0].pose;
+    skeleton = poses[0].skeleton;
+  }
+}
 
-// function modelLoaded() {
-//   console.log('poseNet ready');
-// }
+function modelLoaded() {
+  console.log('poseNet ready');
+}
 
 //SVG animation
 
@@ -351,6 +354,7 @@ export async function bindPage() {
   setupFPS();
   
   toggleLoadingUI(false);
+  setupModel();
   detectPoseInRealTime(video, posenet);
 }
 
@@ -365,5 +369,6 @@ async function parseSVG(target) {
   illustration = new PoseIllustration(canvasScope);
   illustration.bindSkeleton(skeleton, svgScope);
 }
-    
+
+loadModel();
 bindPage();

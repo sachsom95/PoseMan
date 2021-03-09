@@ -19,6 +19,10 @@ import * as blathersSVG from './resources/illustration/blathers.svg';
 import * as tomNookSVG from './resources/illustration/tom-nook.svg';
 import { loadMtcnnModel } from 'face-api.js';
 
+
+import { Machine, interpret } from "xstate";
+import {stateMachine} from './stateMachine.js';
+
 // Camera stream video element
 let video;
 let videoWidth = 640;
@@ -179,6 +183,45 @@ function gotPoses(poses) {
 function modelLoaded() {
   console.log('poseNet ready');
 }
+
+
+//Gameplay
+let testString = "YMCA";
+let userAnswer = "";
+
+function gameOn() {
+  service = interpret(stateMachine).onTransition(current => {
+    console.log(current);
+  });
+
+  componentDidMount() {
+    this.service.start();
+  }
+
+  componentWillUnmount() {
+    this.service.stop();
+  }
+
+  document.getElementById('startButton').addEventListener('click',function ()
+    {
+      handleSubmit = () => {
+        console.log("Submitting");
+        this.service.send("SUBMIT");
+      };
+    }); 
+}
+
+function startCountdown() {
+  var timeleft = 10;
+  var downloadTimer = setInterval(function(){
+    if(timeleft <= 0){
+      clearInterval(downloadTimer);
+    }
+    document.getElementById("progressBar").value = 10 - timeleft;
+    timeleft -= 1;
+  }, 1000);
+}
+
 
 //SVG animation
 

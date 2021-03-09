@@ -142,7 +142,7 @@ function brainLoaded() {
 }
 
 function classifyPose() {
-  console.log('Classify pose');
+  // console.log('Classify pose');
   if (pose) {
     let inputs = [];
     for (let i = 0; i < pose.keypoints.length; i++) {
@@ -158,9 +158,11 @@ function classifyPose() {
 }
 
 function gotResult(error, results) { 
-  console.log('result'); 
+  // console.log('result'); 
   if (results[0].confidence > 0.75) {
     poseLabel = results[0].label.toUpperCase();
+    console.log(poseLabel);
+    draw();
   }
   //console.log(results[0].confidence);
   classifyPose();

@@ -17,7 +17,8 @@
     "face-api.js": "^0.22.1",
     "paper": "^0.12.1",
     "parcel-plugin-static-files-copy": "^2.5.1",
-    "stats.js": "^0.17.0"
+    "stats.js": "^0.17.0",
+    "xstate": "4.6.7"
   },
   "scripts": {
     "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --open  --no-source-maps",

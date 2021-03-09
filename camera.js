@@ -111,7 +111,8 @@ let poseLabel = "Nothing yet!";
 
 
 function draw() {
-      document.getElementById("image-label").innerHTML = poseLabel;
+  console.log('Drawing!');
+  document.getElementById('image-label').innerHTML = poseLabel;
 }
 
 function setupModel() {
@@ -142,7 +143,7 @@ function brainLoaded() {
 }
 
 function classifyPose() {
-  console.log('Classify pose');
+  // console.log('Classify pose');
   if (pose) {
     let inputs = [];
     for (let i = 0; i < pose.keypoints.length; i++) {
@@ -158,16 +159,17 @@ function classifyPose() {
 }
 
 function gotResult(error, results) { 
-  console.log('result'); 
   if (results[0].confidence > 0.75) {
     poseLabel = results[0].label.toUpperCase();
+    console.log(poseLabel);
+    draw();
   }
   //console.log(results[0].confidence);
   classifyPose();
 }
 
 function gotPoses(poses) {
-  console.log('got poses');
+  // console.log('got poses');
   if (poses.length > 0) {
     pose = poses[0].pose;
     skeleton = poses[0].skeleton;

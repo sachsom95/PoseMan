@@ -8,6 +8,6 @@ export default function gamePlay(answer, userAnswer) {
   
         //Otherwise:
         return reject("You lost!");
-      }, 5000); //5 seconds
+      }, 1000); //5 seconds
     });
   }

@@ -2,9 +2,7 @@ import * as posenet_module from '@tensorflow-models/posenet';
 import * as facemesh_module from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs';
 import * as paper from 'paper';
-import dat from 'dat.gui';
 import Stats from 'stats.js';
-// import "babel-polyfill";
 
 import {drawKeypoints, drawPoint, drawSkeleton, isMobile, toggleLoadingUI, setStatusText} from './utils/demoUtils';
 import {SVGUtils} from './utils/svgUtils'
@@ -14,15 +12,11 @@ import {FileUtils} from './utils/fileUtils';
 
 import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
-import * as abstractSVG from './resources/illustration/abstract.svg';
-import * as blathersSVG from './resources/illustration/blathers.svg';
-import * as tomNookSVG from './resources/illustration/tom-nook.svg';
 import { loadMtcnnModel } from 'face-api.js';
 
 
 import {Machine, interpret,assign} from "xstate";
 import {stateMachine} from './stateMachine.js';
-import {gamePlay} from "./gameplay.js";
 
 // Camera stream video element
 let video;
@@ -49,9 +43,6 @@ const stats = new Stats();
 const avatarSvgs = {
   'girl': girlSVG.default,
   'boy': boySVG.default,
-  'abstract': abstractSVG.default,
-  'blathers': blathersSVG.default,
-  'tom-nook': tomNookSVG.default,
 };
 
 /**
@@ -147,7 +138,6 @@ function brainLoaded() {
 }
 
 function classifyPose() {
-  // console.log('Classify pose');
   if (pose) {
     let inputs = [];
     for (let i = 0; i < pose.keypoints.length; i++) {
@@ -163,13 +153,11 @@ function classifyPose() {
 }
 
 function gotResult(error, results) { 
-  // console.log('result'); 
   if (results[0].confidence > 0.80) {
     poseLabel = results[0].label.toUpperCase();
     console.log(poseLabel);
     draw();
-  }
-  //console.log(results[0].confidence);
+  }  
   classifyPose();
 }
 
@@ -218,28 +206,6 @@ function startCountdown() {
 
 
 //SVG animation
-
-/**
- * Sets up dat.gui controller on the top-right of the window
- */
-function setupGui(cameras) {
-
-  // if (cameras.length > 0) {
-  //   guiState.camera = cameras[0].deviceId;
-  // }
-
-  // const gui = new dat.GUI({width: 300}); //Control Gui on/off
-
-  // let multi = gui.addFolder('Image');
-  // gui.add(guiState, 'avatarSVG', Object.keys(avatarSvgs)).onChange(() => parseSVG(avatarSvgs[guiState.avatarSVG]));
-  // multi.open();
-
-  // let output = gui.addFolder('Debug control');
-  // output.add(guiState.debug, 'showDetectionDebug');
-  // output.add(guiState.debug, 'showIllustrationDebug');
-  // output.open();
-}
-
 /**
  * Sets up a frames per second panel on the top-left of the window
  */
@@ -335,7 +301,6 @@ function detectPoseInRealTime(video) {
 
     requestAnimationFrame(poseDetectionFrame);
   }
-
   poseDetectionFrame();
 }
 
@@ -389,7 +354,7 @@ export async function bindPage() {
     throw e;
   }
 
-  setupGui([], posenet);
+  // setupGui([], posenet);
   setupFPS();
   
   toggleLoadingUI(false);

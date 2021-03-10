@@ -20,8 +20,9 @@ import * as tomNookSVG from './resources/illustration/tom-nook.svg';
 import { loadMtcnnModel } from 'face-api.js';
 
 
-import {Machine, interpret} from "xstate";
+import {Machine, interpret,assign} from "xstate";
 import {stateMachine} from './stateMachine.js';
+import {gamePlay} from "./gameplay.js";
 
 // Camera stream video element
 let video;
@@ -191,29 +192,16 @@ let userAnswer = "";
 let service;
 
 function gameOn() {
-
-  const gameMachine = stateMachine;
-  
-  this.service = interpret(gameMachine).onTransition(current => {
+  service = interpret(stateMachine).start();  
+  service.onTransition(current => {
     console.log(current);
   });
-
-  service.start();
-  // componentDidMount() {
-  //   this.service.start();
-  // }
-
-  // componentWillUnmount() {
-  //   this.service.stop();
-  // }
-
-  document.getElementById('startButton').addEventListener('click',function ()
-    {
-      handleSubmit = () => {
+  document.getElementById('startButton').addEventListener('click', function () {
+      // function handleSubmit () {
         console.log(stateMachine.states);
         console.log("Submitting");
-        this.service.send("SUBMIT");
-      };
+        service.send("SUBMIT");
+      // }
     }); 
 }
 

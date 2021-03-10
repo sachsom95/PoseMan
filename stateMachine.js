@@ -1,5 +1,5 @@
 import {Machine, assign} from "xstate";
-import {gamePlay} from "./gameplay.js";
+import gamePlay from "./gameplay.js";
 
 const stateMachine = Machine({
   initial: "waiting",

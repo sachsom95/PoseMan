@@ -20,7 +20,7 @@ import * as tomNookSVG from './resources/illustration/tom-nook.svg';
 import { loadMtcnnModel } from 'face-api.js';
 
 
-import { Machine, interpret } from "xstate";
+import {Machine, interpret} from "xstate";
 import {stateMachine} from './stateMachine.js';
 
 // Camera stream video element
@@ -163,7 +163,7 @@ function classifyPose() {
 
 function gotResult(error, results) { 
   // console.log('result'); 
-  if (results[0].confidence > 0.75) {
+  if (results[0].confidence > 0.80) {
     poseLabel = results[0].label.toUpperCase();
     console.log(poseLabel);
     draw();
@@ -173,7 +173,7 @@ function gotResult(error, results) {
 }
 
 function gotPoses(poses) {
-  console.log('got poses');
+  // console.log('got poses'); //too many console logs
   if (poses.length > 0) {
     pose = poses[0].pose;
     skeleton = poses[0].skeleton;
@@ -188,23 +188,29 @@ function modelLoaded() {
 //Gameplay
 let testString = "YMCA";
 let userAnswer = "";
+let service;
 
 function gameOn() {
-  service = interpret(stateMachine).onTransition(current => {
+
+  const gameMachine = stateMachine;
+  
+  this.service = interpret(gameMachine).onTransition(current => {
     console.log(current);
   });
 
-  componentDidMount() {
-    this.service.start();
-  }
+  service.start();
+  // componentDidMount() {
+  //   this.service.start();
+  // }
 
-  componentWillUnmount() {
-    this.service.stop();
-  }
+  // componentWillUnmount() {
+  //   this.service.stop();
+  // }
 
   document.getElementById('startButton').addEventListener('click',function ()
     {
       handleSubmit = () => {
+        console.log(stateMachine.states);
         console.log("Submitting");
         this.service.send("SUBMIT");
       };
@@ -417,3 +423,5 @@ async function parseSVG(target) {
 
 loadModel();
 bindPage();
+startCountdown();
+gameOn();

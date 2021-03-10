@@ -1,4 +1,4 @@
-import { Machine } from "xstate";
+import {Machine, assign} from "xstate";
 import {gamePlay} from "./gameplay.js";
 
 const stateMachine = Machine({
@@ -18,7 +18,7 @@ const stateMachine = Machine({
         id: "play",
         src: (context, event) => {
           const { answer,userAnswer } = context;
-          gamePlay(answer, userAnswer),
+          gamePlay(answer, userAnswer);
         },
         onDone: {
           target: "endGame"
@@ -33,7 +33,7 @@ const stateMachine = Machine({
     }
   },
   on: {
-    INPUT_CHANGE: {
+    INPUT_CHANGE: { //Event that updates the context aka answer and user answer
       actions: assign((ctx, event) => {
         return {
           [event.name]: event.value

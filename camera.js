@@ -3,8 +3,7 @@ import * as facemesh_module from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs';
 import * as paper from 'paper';
 import dat from 'dat.gui';
-import Stats from 'stats.js';
-// import "babel-polyfill";
+
 
 import {drawKeypoints, drawPoint, drawSkeleton, isMobile, toggleLoadingUI, setStatusText} from './utils/demoUtils';
 import {SVGUtils} from './utils/svgUtils'
@@ -14,9 +13,6 @@ import {FileUtils} from './utils/fileUtils';
 
 import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
-import * as abstractSVG from './resources/illustration/abstract.svg';
-import * as blathersSVG from './resources/illustration/blathers.svg';
-import * as tomNookSVG from './resources/illustration/tom-nook.svg';
 import { loadMtcnnModel } from 'face-api.js';
 
 // Camera stream video element
@@ -40,13 +36,10 @@ let nmsRadius = 30.0;
 
 // Misc
 let mobile = false;
-const stats = new Stats();
 const avatarSvgs = {
   'girl': girlSVG.default,
   'boy': boySVG.default,
-  'abstract': abstractSVG.default,
-  'blathers': blathersSVG.default,
-  'tom-nook': tomNookSVG.default,
+
 };
 
 /**
@@ -183,37 +176,6 @@ function modelLoaded() {
 
 }
 
-//SVG animation
-
-/**
- * Sets up dat.gui controller on the top-right of the window
- */
-function setupGui(cameras) {
-
-  // if (cameras.length > 0) {
-  //   guiState.camera = cameras[0].deviceId;
-  // }
-
-  // const gui = new dat.GUI({width: 300}); //Control Gui on/off
-
-  // let multi = gui.addFolder('Image');
-  // gui.add(guiState, 'avatarSVG', Object.keys(avatarSvgs)).onChange(() => parseSVG(avatarSvgs[guiState.avatarSVG]));
-  // multi.open();
-
-  // let output = gui.addFolder('Debug control');
-  // output.add(guiState.debug, 'showDetectionDebug');
-  // output.add(guiState.debug, 'showIllustrationDebug');
-  // output.open();
-}
-
-/**
- * Sets up a frames per second panel on the top-left of the window
- */
-function setupFPS() {
-  // stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.getElementById('main').appendChild(stats.dom);
-}
-
 /**
  * Feeds an image to posenet to estimate poses - this is where the magic
  * happens. This function loops with a requestAnimationFrame method.
@@ -230,8 +192,7 @@ function detectPoseInRealTime(video) {
   keypointCanvas.height = videoHeight;
 
   async function poseDetectionFrame() {
-    // Begin monitoring code for frames per second
-    stats.begin();
+
 
     let poses = [];
    
@@ -244,6 +205,7 @@ function detectPoseInRealTime(video) {
     videoCtx.restore();
 
     // Creates a tensor from an image
+    //keeping it in multi-person makes the svg detection better - sachin
     const input = tf.browser.fromPixels(canvas);
     faceDetection = await facemesh.estimateFaces(input, false, false);
     let all_poses = await posenet.estimatePoses(video, {
@@ -296,8 +258,7 @@ function detectPoseInRealTime(video) {
       canvasHeight / videoHeight, 
       new canvasScope.Point(0, 0));
 
-    // End monitoring code for frames per second
-    stats.end();
+
 
     requestAnimationFrame(poseDetectionFrame);
   }
@@ -354,8 +315,7 @@ export async function bindPage() {
     throw e;
   }
 
-  setupGui([], posenet);
-  // setupFPS();
+
   
   toggleLoadingUI(false);
   setupModel();

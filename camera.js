@@ -326,7 +326,7 @@ export async function bindPage() {
   setupCanvas();
 
   toggleLoadingUI(true);
-  setStatusText('Loading PoseNet model...');
+  setStatusText('Loading the models...');
   posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,
@@ -340,8 +340,9 @@ export async function bindPage() {
   setStatusText('Loading Avatar file...');
   let t0 = new Date();
   await parseSVG(Object.values(avatarSvgs)[0]);
-
   setStatusText('Setting up camera...');
+  var splash = document.getElementById("loader");
+  splash.classList.add('display-none');
   try {
     video = await loadVideo();
   } catch (e) {
@@ -353,7 +354,7 @@ export async function bindPage() {
   }
 
   setupGui([], posenet);
-  setupFPS();
+  // setupFPS();
   
   toggleLoadingUI(false);
   setupModel();

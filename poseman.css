@@ -48,11 +48,11 @@
  *  https://github.com/tobiasahlin/SpinKit
  */
 .sk-spinner-pulse {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     margin: auto 10px;
-    float: left;
-    background-color: #333;
+    /* float: left; */
+    background-color: rgb(250, 246, 246);
     border-radius: 100%;
     -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
     animation: sk-pulseScaleOut 1s infinite ease-in-out;
@@ -161,3 +161,41 @@ header {
       margin-top:50px;
       margin-bottom:50px;
   }
+
+
+
+
+
+/* SPASH SCREEN */
+.splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background:rgb(22, 22, 22) ;
+    z-index: 200;
+    text-align: center;
+    line-height: 90vh;
+
+}
+
+.splash.display-none {
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #070707;
+    z-index: -10;
+    text-align: center;
+    line-height: 90vh;
+    transition: all 1s;
+
+}
+
+.fade-in {
+    line-height: 100vh;
+    color: white;
+}

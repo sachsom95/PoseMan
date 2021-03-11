@@ -178,6 +178,9 @@ function gotPoses(poses) {
 
 function modelLoaded() {
   console.log('poseNet ready');
+  var splash = document.getElementById("loader");
+  splash.classList.add('display-none');
+
 }
 
 //SVG animation
@@ -341,8 +344,6 @@ export async function bindPage() {
   let t0 = new Date();
   await parseSVG(Object.values(avatarSvgs)[0]);
   setStatusText('Setting up camera...');
-  var splash = document.getElementById("loader");
-  splash.classList.add('display-none');
   try {
     video = await loadVideo();
   } catch (e) {

@@ -51,7 +51,7 @@ function setDatGuiPropertyCss(propertyText, liCssString, spanCssString = '') {
  * Toggles between the loading UI and the main canvas UI.
  */
 export function toggleLoadingUI(
-    showLoadingUI, loadingDivId = 'loading', mainDivId = 'main') {
+    showLoadingUI, loadingDivId = 'loader', mainDivId = 'main') {
   if (showLoadingUI) {
     document.getElementById(loadingDivId).style.display = 'block';
     document.getElementById(mainDivId).style.display = 'none';

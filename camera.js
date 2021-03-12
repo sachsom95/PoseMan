@@ -15,9 +15,19 @@ import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
 import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 
-import {getImage,lst} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson} from './utils/gameUtils.js'
+// levels info
+const levelInfo = {
+  easy: 'levels/easy.json',
+  medium: 'levels/medium.json',
+  difficult: 'levels/hard.json'
+};
 
-console.log(getImage());
+async function getOutput(){
+  await readJson(levelInfo.easy);
+  console.log(`data for level collected`)
+}
+
 
 // Camera stream video element
 let video;
@@ -108,7 +118,7 @@ let poseLabel = "Nothing yet!";
 
 
 function draw() {
-  console.log('Drawing!');
+  // console.log('Drawing!');
   document.getElementById('image-label').innerHTML = poseLabel;
 }
 
@@ -158,7 +168,7 @@ function classifyPose() {
 function gotResult(error, results) { 
   if (results[0].confidence > 0.75) {
     poseLabel = results[0].label.toUpperCase();
-    console.log(poseLabel);
+    // console.log(poseLabel);
     draw();
   }
   //console.log(results[0].confidence);
@@ -340,3 +350,5 @@ async function parseSVG(target) {
 
 loadModel();
 bindPage();
+getOutput();
+

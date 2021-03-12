@@ -13,7 +13,11 @@ import {FileUtils} from './utils/fileUtils';
 
 import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
-import { loadMtcnnModel } from 'face-api.js';
+import { ComposableTask, loadMtcnnModel } from 'face-api.js';
+
+import {getImage,lst} from './utils/gameUtils.js'
+
+console.log(getImage());
 
 // Camera stream video element
 let video;

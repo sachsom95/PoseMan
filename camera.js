@@ -117,7 +117,7 @@ function setupModel() {
 function loadModel() {
   let options = {
     inputs: 34,
-    outputs: 4,
+    outputs: 7,
     task: 'classification',
     debug: true
   }

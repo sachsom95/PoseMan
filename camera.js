@@ -22,7 +22,8 @@ const levelInfo = {
   medium: 'levels/medium.json',
   difficult: 'levels/hard.json'
 };
-
+//This function will collect the Json file for particular level
+//Since we need to use xmlhttp I had to make it async
 async function getOutput(){
   await readJson(levelInfo.easy);
   console.log(`data for level collected`)

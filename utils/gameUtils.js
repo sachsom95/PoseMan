@@ -16,6 +16,19 @@ export const imageVisitied = function (data){
     lst.push(String(data));
 }
 
+export function nextImage(){
+    console.log("came to next image function");
+    var index = getImage();
+    imageVisitied(index);
+    var image = levelData[index];
+    var url = './images/' + image;
+    console.log(url);
+    document.getElementById("guess_image").src = url;
+}
+
+
+
+
 // helper inner function
 function passJson(data){
     levelData = data;

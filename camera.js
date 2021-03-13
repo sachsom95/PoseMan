@@ -15,7 +15,7 @@ import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
 import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 
-import {getImage,lst,levelData,imageVisitied,passJson,readJson} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage} from './utils/gameUtils.js'
 // levels info
 const levelInfo = {
   easy: 'levels/easy.json',
@@ -25,6 +25,7 @@ const levelInfo = {
 //This function will collect the Json file for particular level
 //Since we need to use xmlhttp I had to make it async
 async function getOutput(){
+
   await readJson(levelInfo.easy);
   console.log(`data for level collected`)
 }

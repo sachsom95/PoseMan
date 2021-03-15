@@ -2,8 +2,6 @@ import * as posenet_module from '@tensorflow-models/posenet';
 import * as facemesh_module from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs';
 import * as paper from 'paper';
-import dat from 'dat.gui';
-
 
 import {drawKeypoints, drawPoint, drawSkeleton, isMobile, toggleLoadingUI, setStatusText} from './utils/demoUtils';
 import {SVGUtils} from './utils/svgUtils'
@@ -30,6 +28,8 @@ async function getOutput(){
   console.log(`data for level collected`)
 }
 
+import {Machine, interpret,assign} from "xstate";
+import {stateMachine} from './stateMachine.js';
 
 // Camera stream video element
 let video;
@@ -55,7 +55,6 @@ let mobile = false;
 const avatarSvgs = {
   'girl': girlSVG.default,
   'boy': boySVG.default,
-
 };
 
 /**
@@ -168,17 +167,15 @@ function classifyPose() {
 }
 
 function gotResult(error, results) { 
-  if (results[0].confidence > 0.75) {
+  if (results[0].confidence > 0.80) {
     poseLabel = results[0].label.toUpperCase();
-    // console.log(poseLabel);
+    console.log(poseLabel);
     draw();
-  }
-  //console.log(results[0].confidence);
+  } 
   classifyPose();
 }
 
 function gotPoses(poses) {
-  // console.log('got poses');
   if (poses.length > 0) {
     pose = poses[0].pose;
     skeleton = poses[0].skeleton;
@@ -189,9 +186,41 @@ function modelLoaded() {
   console.log('poseNet ready');
   var splash = document.getElementById("loader");
   splash.classList.add('display-none');
-
 }
 
+
+//Gameplay
+let testString = "YMCA";
+let userAnswer = "";
+let service;
+
+function gameOn() {
+  service = interpret(stateMachine).start();  
+  service.onTransition(current => {
+    console.log(current);
+  });
+  document.getElementById('startButton').addEventListener('click', function () {
+      // function handleSubmit () {
+        console.log(stateMachine.states);
+        console.log("Submitting");
+        service.send("SUBMIT");
+      // }
+    }); 
+}
+
+function startCountdown() {
+  var timeleft = 10;
+  var downloadTimer = setInterval(function(){
+    if(timeleft <= 0){
+      clearInterval(downloadTimer);
+    }
+    document.getElementById("progressBar").value = 10 - timeleft;
+    timeleft -= 1;
+  }, 1000);
+}
+
+
+//SVG animation
 /**
  * Feeds an image to posenet to estimate poses - this is where the magic
  * happens. This function loops with a requestAnimationFrame method.
@@ -278,7 +307,6 @@ function detectPoseInRealTime(video) {
 
     requestAnimationFrame(poseDetectionFrame);
   }
-
   poseDetectionFrame();
 }
 
@@ -330,8 +358,6 @@ export async function bindPage() {
     info.style.display = 'block';
     throw e;
   }
-
-
   
   toggleLoadingUI(false);
   setupModel();
@@ -352,8 +378,9 @@ async function parseSVG(target) {
 
 loadModel();
 bindPage();
+startCountdown();
+gameOn();
 getOutput();
 setTimeout(() =>{
   nextImage();
 },15000 )
-

@@ -199,3 +199,18 @@ header {
     line-height: 100vh;
     color: white;
 }
+
+/* ReadySet Go */
+.ml4 {
+    position: relative;
+    font-weight: 900;
+    font-size: 6em;
+  }
+  .ml4 .letters {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0.3em;
+    right: 0;
+    opacity: 0; 
+  }

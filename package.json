@@ -17,7 +17,6 @@
     "face-api.js": "^0.22.1",
     "paper": "^0.12.1",
     "parcel-plugin-static-files-copy": "^2.5.1",
-    "stats.js": "^0.17.0",
     "xstate": "4.6.7"
   },
   "scripts": {

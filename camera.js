@@ -13,7 +13,12 @@ import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
 import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 
+// import {Machine, interpret,assign} from "xstate";
+// import {stateMachine} from './stateMachine.js';
+
 import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage} from './utils/gameUtils.js'
+import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
+import {allSet,readyState} from './utils/readyState.js'
 // levels info
 const levelInfo = {
   easy: 'levels/easy.json',
@@ -28,8 +33,7 @@ async function getOutput(){
   console.log(`data for level collected`)
 }
 
-import {Machine, interpret,assign} from "xstate";
-import {stateMachine} from './stateMachine.js';
+
 
 // Camera stream video element
 let video;
@@ -189,35 +193,35 @@ function modelLoaded() {
 }
 
 
-//Gameplay
-let testString = "YMCA";
-let userAnswer = "";
-let service;
+// //Gameplay
+// let testString = "YMCA";
+// let userAnswer = "";
+// let service;
 
-function gameOn() {
-  service = interpret(stateMachine).start();  
-  service.onTransition(current => {
-    console.log(current);
-  });
-  document.getElementById('startButton').addEventListener('click', function () {
-      // function handleSubmit () {
-        console.log(stateMachine.states);
-        console.log("Submitting");
-        service.send("SUBMIT");
-      // }
-    }); 
-}
+// function gameOn() {
+//   service = interpret(stateMachine).start();  
+//   service.onTransition(current => {
+//     console.log(current);
+//   });
+//   document.getElementById('startButton').addEventListener('click', function () {
+//       // function handleSubmit () {
+//         console.log(stateMachine.states);
+//         console.log("Submitting");
+//         service.send("SUBMIT");
+//       // }
+//     }); 
+// }
 
-function startCountdown() {
-  var timeleft = 10;
-  var downloadTimer = setInterval(function(){
-    if(timeleft <= 0){
-      clearInterval(downloadTimer);
-    }
-    document.getElementById("progressBar").value = 10 - timeleft;
-    timeleft -= 1;
-  }, 1000);
-}
+// function startCountdown() {
+//   var timeleft = 10;
+//   var downloadTimer = setInterval(function(){
+//     if(timeleft <= 0){
+//       clearInterval(downloadTimer);
+//     }
+//     document.getElementById("progressBar").value = 10 - timeleft;
+//     timeleft -= 1;
+//   }, 1000);
+// }
 
 
 //SVG animation
@@ -327,13 +331,13 @@ function setupCanvas() {
 }
 
 /**
- * Kicks off the demo by loading the posenet model, finding and loading
+ * Kicks off the game by loading the posenet model, finding and loading
  * available camera devices, and setting off the detectPoseInRealTime function.
  */
 export async function bindPage() {
   setupCanvas();
 
-  toggleLoadingUI(true);
+  // toggleLoadingUI(true);
   setStatusText('Loading the models...');
   posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
@@ -359,8 +363,9 @@ export async function bindPage() {
     throw e;
   }
   
-  toggleLoadingUI(false);
+  // toggleLoadingUI(false);
   setupModel();
+  allSet().then(gameOn);
   detectPoseInRealTime(video, posenet);
 }
 
@@ -379,7 +384,7 @@ async function parseSVG(target) {
 loadModel();
 bindPage();
 startCountdown();
-gameOn();
+// gameOn();
 getOutput();
 setTimeout(() =>{
   nextImage();

@@ -12,8 +12,22 @@ import {FileUtils} from './utils/fileUtils';
 
 import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
-import { loadMtcnnModel } from 'face-api.js';
+import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage} from './utils/gameUtils.js'
+// levels info
+const levelInfo = {
+  easy: 'levels/easy.json',
+  medium: 'levels/medium.json',
+  difficult: 'levels/hard.json'
+};
+//This function will collect the Json file for particular level
+//Since we need to use xmlhttp I had to make it async
+async function getOutput(){
+
+  await readJson(levelInfo.easy);
+  console.log(`data for level collected`)
+}
 
 import {Machine, interpret,assign} from "xstate";
 import {stateMachine} from './stateMachine.js';
@@ -39,7 +53,6 @@ let nmsRadius = 30.0;
 
 // Misc
 let mobile = false;
-const stats = new Stats();
 const avatarSvgs = {
   'girl': girlSVG.default,
   'boy': boySVG.default,
@@ -107,7 +120,8 @@ let poseLabel = "Nothing yet!";
 
 
 function draw() {
-      document.getElementById("image-label").innerHTML = poseLabel;
+  // console.log('Drawing!');
+  document.getElementById('image-label').innerHTML = poseLabel;
 }
 
 function setupModel() {
@@ -119,7 +133,7 @@ function setupModel() {
 function loadModel() {
   let options = {
     inputs: 34,
-    outputs: 4,
+    outputs: 7,
     task: 'classification',
     debug: true
   }
@@ -157,12 +171,11 @@ function gotResult(error, results) {
     poseLabel = results[0].label.toUpperCase();
     console.log(poseLabel);
     draw();
-  }  
+  } 
   classifyPose();
 }
 
 function gotPoses(poses) {
-  // console.log('got poses'); //too many console logs
   if (poses.length > 0) {
     pose = poses[0].pose;
     skeleton = poses[0].skeleton;
@@ -171,6 +184,8 @@ function gotPoses(poses) {
 
 function modelLoaded() {
   console.log('poseNet ready');
+  var splash = document.getElementById("loader");
+  splash.classList.add('display-none');
 }
 
 
@@ -207,14 +222,6 @@ function startCountdown() {
 
 //SVG animation
 /**
- * Sets up a frames per second panel on the top-left of the window
- */
-function setupFPS() {
-  // stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.getElementById('main').appendChild(stats.dom);
-}
-
-/**
  * Feeds an image to posenet to estimate poses - this is where the magic
  * happens. This function loops with a requestAnimationFrame method.
  */
@@ -230,8 +237,7 @@ function detectPoseInRealTime(video) {
   keypointCanvas.height = videoHeight;
 
   async function poseDetectionFrame() {
-    // Begin monitoring code for frames per second
-    stats.begin();
+
 
     let poses = [];
    
@@ -244,6 +250,7 @@ function detectPoseInRealTime(video) {
     videoCtx.restore();
 
     // Creates a tensor from an image
+    //keeping it in multi-person makes the svg detection better - sachin
     const input = tf.browser.fromPixels(canvas);
     faceDetection = await facemesh.estimateFaces(input, false, false);
     let all_poses = await posenet.estimatePoses(video, {
@@ -296,8 +303,7 @@ function detectPoseInRealTime(video) {
       canvasHeight / videoHeight, 
       new canvasScope.Point(0, 0));
 
-    // End monitoring code for frames per second
-    stats.end();
+
 
     requestAnimationFrame(poseDetectionFrame);
   }
@@ -328,7 +334,7 @@ export async function bindPage() {
   setupCanvas();
 
   toggleLoadingUI(true);
-  setStatusText('Loading PoseNet model...');
+  setStatusText('Loading the models...');
   posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,
@@ -342,7 +348,6 @@ export async function bindPage() {
   setStatusText('Loading Avatar file...');
   let t0 = new Date();
   await parseSVG(Object.values(avatarSvgs)[0]);
-
   setStatusText('Setting up camera...');
   try {
     video = await loadVideo();
@@ -353,9 +358,6 @@ export async function bindPage() {
     info.style.display = 'block';
     throw e;
   }
-
-  // setupGui([], posenet);
-  setupFPS();
   
   toggleLoadingUI(false);
   setupModel();
@@ -378,3 +380,7 @@ loadModel();
 bindPage();
 startCountdown();
 gameOn();
+getOutput();
+setTimeout(() =>{
+  nextImage();
+},15000 )

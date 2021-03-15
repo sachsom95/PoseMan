@@ -1,158 +1,98 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en" class="h-100">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>PoseMan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="poseman.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="./scripts/p5.js"></script> 
     <script src="./scripts/p5.sound.min.js"></script>
-    <!-- <script src="ml5.min.js"></script> -->
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 
-    <title>PoseNet - Camera Feed Demo</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
 
-        .canvas-container {
-            width: 800px;
-            max-width: 100%;
-            display: flex;
-            justify-content: center;
-            position: relative;
-        }
 
-        .camera-canvas {
-            position: absolute;
-            transform: scale(0.5, 0.5);
-            transform-origin: 0 0;
-            left: 10px;
-            top: 10px;
-        }
-
-        #main {
-            left: 0;
-            top: 0;
-            position: absolute;
-        }
-
-        .illustration-canvas {
-            border: 1px solid #eeeeee;
-        }
-
-        .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            color: black;
-        }
-
-        .footer-text {
-            max-width: 600px;
-            text-align: center;
-            margin: auto;
-        }
-
-        @media only screen and (max-width: 600px) {
-
-            .footer-text,
-            .dg {
-                display: none;
-            }
-        }
-
-        /*
-         *  The following loading spinner CSS is from SpinKit project
-         *  https://github.com/tobiasahlin/SpinKit
-         */
-        .sk-spinner-pulse {
-            width: 20px;
-            height: 20px;
-            margin: auto 10px;
-            float: left;
-            background-color: #333;
-            border-radius: 100%;
-            -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
-            animation: sk-pulseScaleOut 1s infinite ease-in-out;
-        }
-
-        @-webkit-keyframes sk-pulseScaleOut {
-            0% {
-                -webkit-transform: scale(0);
-                transform: scale(0);
-            }
-
-            100% {
-                -webkit-transform: scale(1.0);
-                transform: scale(1.0);
-                opacity: 0;
-            }
-        }
-
-        @keyframes sk-pulseScaleOut {
-            0% {
-                -webkit-transform: scale(0);
-                transform: scale(0);
-            }
-
-            100% {
-                -webkit-transform: scale(1.0);
-                transform: scale(1.0);
-                opacity: 0;
-            }
-        }
-
-        .spinner-text {
-            float: left;
-        }
-    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+<body class="d-flex h-100 text-center text-white bg-dark">
 
-<body>
-    <div id="info" style='display:none'>
-    </div>
-    <div id="loading" style='position: relative; left: 0'>
-        <span class="spinner-text" id="status">
-            Loading PoseNet model...
-        </span>
-        <div class="sk-spinner sk-spinner-pulse"></div>
-    </div>
-    <div class="canvas-container">
-        <div id='main' style='display:none'>
-            <video id="video" playsinline style=" -moz-transform: scaleX(-1);
-            -o-transform: scaleX(-1);
-            -webkit-transform: scaleX(-1);
-            transform: scaleX(-1);
-            display: none;
-            ">
-            </video>
-            <canvas id="output" class="camera-canvas"></canvas>
-            <canvas id="keypoints" class="camera-canvas"></canvas>
-        </div>
-        <canvas class="illustration-canvas"></cavnas>
-    </div>
-    <progress value="0" max="10" id="progressBar"></progress>
-    <p>
-        <button id="startButton" type ="button">Start Game!</button>
-    </p>
-    <p id="image-label"> Nothing yet! </p>
-    <button id="acceptLetter" type ="button">Accept Letter</button>
-    <p id="answer-label"> Text so far </p>
-    <div class="footer">
-        <!-- <div class="footer-text">
-          <p>
-            Pose Animator runs TF.js <strong>FaceMesh</strong> and <strong>PoseNet</strong> models to animate SVG illustrations with camera feed / static images.<br>
-            It currently supports <strong>single-pose</strong>, <strong>single-face</strong> detection, and has been tested on Destkop Chrome & iOS Safari.
-            <br>
-            (PoseNet model config - MobileNetV1, output stride 16, quant bytes 2)
-          </p>
-        </div> -->
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header>
+          <div>
+            <h3 class="float-md-start mb-0">PoseMan</h3>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link" href="https://github.com/sachsom95/PoseMan" target="_blank">GitHub</a>
+            </nav>
+          </div>
+        </header>
+      
+        <main class="px-3">
+            
+
+            <div class="container">
+
+                <div class="row">
+                  <div class="col-9">
+                    <div class="canvas-container">
+                        <div id='main' style='display:none'>
+                            <video id="video" playsinline style=" -moz-transform: scaleX(-1);
+                            -o-transform: scaleX(-1);
+                            -webkit-transform: scaleX(-1);
+                            transform: scaleX(-1);
+                            display: none;
+                            ">
+                            </video>
+                            <canvas id="output" class="camera-canvas"></canvas>
+                            <canvas id="keypoints" class="camera-canvas"></canvas>
+                        </div>
+                        <canvas class="illustration-canvas"></cavnas>
+                    </div>
+                    <div id="info" style='display:none'>
+                    </div>
+
+                    <div class="splash" id="loader">
+                      <h1 id="status" class="fade-in">Loading PoseNet model...</h1>
+                    </div>
+                    <div id="loading">
+                    </div>
+
+                    <div id="image-label-div" class="clearfix">
+                        <p id="image-label"> Nothing yet! </p>
+                        <button id="acceptLetter" type ="button">Accept Letter</button>
+                        <p id="answer-label"> Text so far </p>
+                    </div>
+
+                  </div>
+                  <div class="col">
+                    <h1>Guess the word!</h1>
+                    <p class="lead">Make letters with your arms and hands to guess the word!</p>
+
+                   <div id="image1">
+                    <img id="guess_image" src="/resources/images/cat.png" class="img-fluid">
+                  </div>
+                  <div id="word1">
+                    <div class="input-group mb-3" id="word_list">
+                        <!-- <input type="text" class="form-control" placeholder="_">
+                        <input type="text" class="form-control" placeholder="_">
+                        <input type="text" class="form-control" placeholder="_">
+                        <input type="text" class="form-control" placeholder="_"> -->
+                      </div>
+                  </div>
+                </div>
+              </div>         
+        </main>
+      
+        <footer class="mt-auto text-white-50">
+          <p>PoseMan. Made with <a href="https://getbootstrap.com/" class="text-white">ML5</a> and <a href="https://getbootstrap.com/" class="text-white">PoseNet</a>. </p><p>By <a href="x" class="text-white">@myrrhDev</a>, <a href="x" class="text-white">@sachsom95</a> and <a href="x" class="text-white">@wilkesalex</a>.</p>
+        </footer>
       </div>
-    <script src="camera.js"></script>
+      <script src="camera.js"></script>
+
 </body>
 
 </html>

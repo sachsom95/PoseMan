@@ -16,6 +16,17 @@ export const imageVisitied = function (data){
     lst.push(String(data));
 }
 
+export function nextImage(){
+    console.log("came to next image function");
+    var index = getImage();
+    imageVisitied(index);
+    var image = levelData[index];
+    var url = './images/' + image;
+    console.log(url);
+    document.getElementById("guess_image").src = url;
+    makeLetters(8);
+}
+
 // helper inner function
 function passJson(data){
     levelData = data;
@@ -36,4 +47,25 @@ export const readJson =  function(url){
         };
     })
     
+}
+
+
+
+
+// This two function will generate the text boxes put number in to @data to make that many 
+// text boxes 
+const helperMakeLetter = function(id,placeholder){
+    var element = document.createElement("input");
+    element.className= "form-control";
+    element.placeholder = placeholder;
+    element.id = "text_box"+id;
+
+    return element;
+}
+export const makeLetters = function(data){
+    var domElement="";
+    for(var i = 0; i < data; i++){
+        domElement = helperMakeLetter(i,"_");  
+        document.getElementById("word_list").appendChild(domElement);
+    }
 }

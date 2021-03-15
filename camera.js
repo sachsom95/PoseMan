@@ -151,6 +151,7 @@ function brainLoaded() {
 }
 
 function classifyPose() {
+  // console.log('Classify pose');
   if (pose) {
     let inputs = [];
     for (let i = 0; i < pose.keypoints.length; i++) {

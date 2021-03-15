@@ -14,7 +14,8 @@
     <!-- <script src="/scripts/p5.sound.min.js"></script> -->
     <!-- <script src="ml5.min.js"></script> -->
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
-  
+
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -59,15 +60,8 @@
                     <div class="splash" id="loader">
                       <h1 id="status" class="fade-in">Loading PoseNet model...</h1>
                     </div>
-
                     <div id="loading">
-                        <!-- <span class="spinner-text" id="status">
-                            Loading PoseNet model...
-                        </span>
-                        <div class="sk-spinner sk-spinner-pulse"></div> -->
                     </div>
-
-
 
                     <div id="image-label-div" class="clearfix">
                         <p id="image-label"> Nothing yet! </p>
@@ -79,35 +73,26 @@
                     <p class="lead">Make letters with your arms and hands to guess the word!</p>
 
                    <div id="image1">
-                    <img src="/resources/images/cat.png" class="img-fluid" alt="Pencil">
+                    <img id="guess_image" src="/resources/images/cat.png" class="img-fluid">
                   </div>
                   <div id="word1">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="_" aria-label="char1">
-                        <input type="text" class="form-control" placeholder="_" aria-label="char2">
-                        <input type="text" class="form-control" placeholder="_" aria-label="char3">
-                        <input type="text" class="form-control" placeholder="_" aria-label="char4">
-                        <input type="text" class="form-control" placeholder="_" aria-label="char5">
-                        <input type="text" class="form-control" placeholder="_" aria-label="char6">
+                    <div class="input-group mb-3" id="word_list">
+                        <!-- <input type="text" class="form-control" placeholder="_">
+                        <input type="text" class="form-control" placeholder="_">
+                        <input type="text" class="form-control" placeholder="_">
+                        <input type="text" class="form-control" placeholder="_"> -->
                       </div>
-
                   </div>
                 </div>
-              </div>
-
-
-    
-            
-
-         
+              </div>         
         </main>
       
         <footer class="mt-auto text-white-50">
           <p>PoseMan. Made with <a href="https://getbootstrap.com/" class="text-white">ML5</a> and <a href="https://getbootstrap.com/" class="text-white">PoseNet</a>. </p><p>By <a href="x" class="text-white">@myrrhDev</a>, <a href="x" class="text-white">@sachsom95</a> and <a href="x" class="text-white">@wilkesalex</a>.</p>
         </footer>
       </div>
+      <script src="camera.js"></script>
 
-    <script src="camera.js"></script>
 </body>
 
 </html>

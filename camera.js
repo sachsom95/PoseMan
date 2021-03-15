@@ -353,4 +353,7 @@ async function parseSVG(target) {
 loadModel();
 bindPage();
 getOutput();
+setTimeout(() =>{
+  nextImage();
+},15000 )
 

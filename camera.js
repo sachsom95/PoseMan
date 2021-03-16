@@ -339,6 +339,9 @@ export async function bindPage() {
 
   // toggleLoadingUI(true);
   setStatusText('Loading the models...');
+  // attach evenListner to our start button start_btn
+  var p = document.getElementById("start_btn"); // Find the paragraph element in the page
+  p.onclick = readSetGo;
   posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,
@@ -384,9 +387,9 @@ async function parseSVG(target) {
 loadModel();
 bindPage();
 startCountdown();
-// gameOn();
+gameOn();
 getOutput();
-setTimeout(() =>{
-  nextImage();
-  readSetGo()
-},20000 )
+// setTimeout(() =>{
+  
+//   readSetGo()
+// },20000 )

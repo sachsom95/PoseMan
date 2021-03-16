@@ -17,7 +17,7 @@ const stateMachine = Machine({
       invoke: {
         id: "play",
         src: (context, event) => {
-          const { answer,userAnswer } = context;
+          const {answer,userAnswer} = context;
           gamePlay(answer, userAnswer);
         },
         onDone: {
@@ -35,8 +35,9 @@ const stateMachine = Machine({
   on: {
     INPUT_CHANGE: { //Event that updates the context aka answer and user answer
       actions: assign((context, event) => {
-        return {
-          [event.name]: event.value
+        console.log(event);
+        return {          
+          [event.name]: event.value,
         };
       })
     }

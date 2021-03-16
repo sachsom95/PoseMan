@@ -378,7 +378,9 @@ FileUtils.setDragDropHandler((result) => {parseSVG(result)});
 
 async function parseSVG(target) {
   // let svgScope = await SVGUtils.importSVG(target /* SVG string or file path */);
-  let svgScope = await SVGUtils.importSVG((avatarSvgs)['girl']); //forces just girl avatar
+  var avatar_select="";
+  (Math.floor(Math.random()*2) === 0) ? avatar_select="boy" : avatar_select="girl";
+  let svgScope = await SVGUtils.importSVG((avatarSvgs)[avatar_select]); //forces just girl avatar
   let skeleton = new Skeleton(svgScope);
   illustration = new PoseIllustration(canvasScope);
   illustration.bindSkeleton(skeleton, svgScope);

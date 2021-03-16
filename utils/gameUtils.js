@@ -24,7 +24,7 @@ export function nextImage(){
     var url = './images/' + image;
     console.log(url);
     document.getElementById("guess_image").src = url;
-    makeLetters(8);
+    makeLetters(3);
 }
 
 // helper inner function

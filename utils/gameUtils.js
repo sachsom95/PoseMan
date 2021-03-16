@@ -69,3 +69,69 @@ export const makeLetters = function(data){
         document.getElementById("word_list").appendChild(domElement);
     }
 }
+
+export const readSetGo = async function(){
+
+    document.getElementById("start_btn").style.display = "none";
+
+  var ml4 = {};
+  ml4.opacityIn = [0,1];
+  ml4.scaleIn = [0.2, 1];
+  ml4.scaleOut = 3;
+  ml4.durationIn = 800;
+  ml4.durationOut = 600;
+  ml4.delay = 500;
+  
+  anime.timeline({loop: false})
+    .add({
+      targets: '.ml4 .letters-1',
+      opacity: ml4.opacityIn,
+      scale: ml4.scaleIn,
+      duration: ml4.durationIn
+    }).add({
+      targets: '.ml4 .letters-1',
+      opacity: 0,
+      scale: ml4.scaleOut,
+      duration: ml4.durationOut,
+      easing: "easeInExpo",
+      delay: ml4.delay
+    }).add({
+      targets: '.ml4 .letters-2',
+      opacity: ml4.opacityIn,
+      scale: ml4.scaleIn,
+      duration: ml4.durationIn
+    }).add({
+      targets: '.ml4 .letters-2',
+      opacity: 0,
+      scale: ml4.scaleOut,
+      duration: ml4.durationOut,
+      easing: "easeInExpo",
+      delay: ml4.delay
+    }).add({
+      targets: '.ml4 .letters-3',
+      opacity: ml4.opacityIn,
+      scale: ml4.scaleIn,
+      duration: ml4.durationIn
+    }).add({
+      targets: '.ml4 .letters-3',
+      opacity: 0,
+      scale: ml4.scaleOut,
+      duration: ml4.durationOut,
+      easing: "easeInExpo",
+      delay: ml4.delay
+    }).add({
+      targets: '.ml4',
+      opacity: 0,
+      duration: 500,
+      delay: 500
+    });
+        document.getElementById("right_game_window_h1").innerHTML = "Guess The Word!";
+        document.getElementById("right_game_window_p").innerHTML ="Make letters with your arms and legs and guess the word";
+    setTimeout(()=>{
+        
+        nextImage();
+        document.getElementById("guess_image").style.visibility = "visible";
+        document.getElementById("word1").style.visibility = "visible";
+
+    },6000 );
+}

@@ -13,6 +13,8 @@
     <script src="./scripts/p5.js"></script> 
     <!-- <script src="/scripts/p5.sound.min.js"></script> -->
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+    <!-- For the ReadySetGo animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
 
 
 
@@ -69,22 +71,25 @@
                     </div>
 
                   </div>
-                  <div class="col">
-                    <h1>Guess the word!</h1>
-                    <p class="lead">Make letters with your arms and hands to guess the word!</p>
+                        <div class="col" id="right_game_window">
+                            <h1 id="right_game_window_h1">Welcome to PoseMan</h1>
+                            <p id="right_game_window_p" class="lead">Click Start to begin the game. See your animated avatar on left. GoodLuck :)</p>
 
-                   <div id="image1">
-                    <img id="guess_image" src="/resources/images/cat.png" class="img-fluid">
-                  </div>
-                  <div id="word1">
-                    <div class="input-group mb-3" id="word_list">
-                        <!-- <input type="text" class="form-control" placeholder="_">
-                        <input type="text" class="form-control" placeholder="_">
-                        <input type="text" class="form-control" placeholder="_">
-                        <input type="text" class="form-control" placeholder="_"> -->
+                          <div id="image1">
+                            <button id="start_btn"class="btn btn-outline-light">Start Game</button>
+                            <h1 class="ml4">
+                              <span class="letters letters-1">Ready</span>
+                              <span class="letters letters-2">Set</span>
+                              <span class="letters letters-3">Go!</span>
+                           </h1>
+                            <img id="guess_image" src="/resources/images/cat.png" class="img-fluid">
+                          </div>
+                          <div id="word1">
+                            <div class="input-group mb-3" id="word_list">
+                            <!-- Dynamic Generation of content here  -->
+                            </div>
+                          </div>
                       </div>
-                  </div>
-                </div>
               </div>         
         </main>
       

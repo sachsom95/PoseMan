@@ -16,7 +16,7 @@ import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 // import {Machine, interpret,assign} from "xstate";
 // import {stateMachine} from './stateMachine.js';
 
-import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo} from './utils/gameUtils.js'
 import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
 import {allSet,readyState} from './utils/readyState.js'
 // levels info
@@ -339,6 +339,9 @@ export async function bindPage() {
 
   // toggleLoadingUI(true);
   setStatusText('Loading the models...');
+  // attach evenListner to our start button start_btn
+  var p = document.getElementById("start_btn"); // Find the paragraph element in the page
+  p.onclick = readSetGo;
   posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,
@@ -384,8 +387,9 @@ async function parseSVG(target) {
 loadModel();
 bindPage();
 startCountdown();
-// gameOn();
+gameOn();
 getOutput();
-setTimeout(() =>{
-  nextImage();
-},15000 )
+// setTimeout(() =>{
+  
+//   readSetGo()
+// },20000 )

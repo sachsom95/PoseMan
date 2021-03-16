@@ -70,7 +70,7 @@ export const makeLetters = function(data){
     }
 }
 
-export const readSetGo = function(){
+export const readSetGo = async function(){
 
 
   var ml4 = {};
@@ -124,5 +124,11 @@ export const readSetGo = function(){
       duration: 500,
       delay: 500
     });
+    document.getElementById("right_game_window_h1").innerHTML = "Guess The Word!";
+        document.getElementById("right_game_window_p").innerHTML ="Make letters with your arms and legs and guess the word";
+    setTimeout(()=>{
+        document.getElementById("guess_image").style.visibility = "visible";
+        document.getElementById("word1").style.visibility = "visible";
 
+    },6000 );
 }

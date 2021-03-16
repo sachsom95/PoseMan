@@ -388,5 +388,5 @@ startCountdown();
 getOutput();
 setTimeout(() =>{
   nextImage();
-  readSetGo();
-},15000 )
+  readSetGo()
+},20000 )

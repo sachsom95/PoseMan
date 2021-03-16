@@ -1,4 +1,9 @@
-
+#guess_image {
+    visibility:hidden;
+}
+#word1{
+    visibility: hidden;
+}
 .canvas-container {
     max-width: 100%;
     display: flex;

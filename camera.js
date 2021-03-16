@@ -192,37 +192,6 @@ function modelLoaded() {
 }
 
 
-// //Gameplay
-// let testString = "YMCA";
-// let userAnswer = "";
-// let service;
-
-// function gameOn() {
-//   service = interpret(stateMachine).start();  
-//   service.onTransition(current => {
-//     console.log(current);
-//   });
-//   document.getElementById('startButton').addEventListener('click', function () {
-//       // function handleSubmit () {
-//         console.log(stateMachine.states);
-//         console.log("Submitting");
-//         service.send("SUBMIT");
-//       // }
-//     }); 
-// }
-
-// function startCountdown() {
-//   var timeleft = 10;
-//   var downloadTimer = setInterval(function(){
-//     if(timeleft <= 0){
-//       clearInterval(downloadTimer);
-//     }
-//     document.getElementById("progressBar").value = 10 - timeleft;
-//     timeleft -= 1;
-//   }, 1000);
-// }
-
-
 //SVG animation
 /**
  * Feeds an image to posenet to estimate poses - this is where the magic
@@ -368,7 +337,6 @@ export async function bindPage() {
   // toggleLoadingUI(false);
   setupModel();
   // allSet().then(gameOn);
-  console.log("af")
   detectPoseInRealTime(video, posenet);
 }
 
@@ -388,7 +356,7 @@ async function parseSVG(target) {
 
 loadModel();
 bindPage();
-startCountdown();
+// startCountdown();
 // gameOn();
 getOutput();
 // setTimeout(() =>{

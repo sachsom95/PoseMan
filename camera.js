@@ -16,7 +16,7 @@ import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 // import {Machine, interpret,assign} from "xstate";
 // import {stateMachine} from './stateMachine.js';
 
-import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText} from './utils/gameUtils.js'
 import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
 import {allSet,readyState} from './utils/readyState.js'
 // levels info
@@ -121,8 +121,7 @@ let skeleton;
 let poseLabel = "Nothing yet!";
 
 //This function sends the letter to the input letter hold
-function draw() {
-  // console.log('Drawing!');
+function draw() {  
   document.getElementById('image-label').innerHTML = poseLabel;
 }
 
@@ -172,8 +171,9 @@ function classifyPose() {
 function gotResult(error, results) { 
   if (results[0].confidence > 0.80) {
     poseLabel = results[0].label.toUpperCase();
-    console.log(poseLabel);
+    // console.log(poseLabel);
     draw();
+    insertInputText(poseLabel);
   } 
   classifyPose();
 }

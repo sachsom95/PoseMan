@@ -1,3 +1,6 @@
+import {gameOn} from './gamePlay.js';
+import {Machine, interpret, assign} from "xstate";
+
 // contains all used images
 export var lst = [];
 // stores levelJson data
@@ -21,7 +24,8 @@ export function nextImage(){
     var index = getImage();
     imageVisitied(index);
     var image = levelData[index];
-    var url = './images/' + image;
+    var url = './images/' + image;    
+    console.log(image.slice(0,image.indexOf(".")));
     console.log(url);
     document.getElementById("guess_image").src = url;
     makeLetters(3);
@@ -51,16 +55,23 @@ export const readJson =  function(url){
 
 
 
-
 // This two function will generate the text boxes put number in to @data to make that many 
 // text boxes 
+//Onchange = Updates the new letter from the input
 const helperMakeLetter = function(id,placeholder){
-    var element = document.createElement("input");
-    element.className= "form-control";
-    element.placeholder = placeholder;
-    element.id = "text_box"+id;
-
-    return element;
+  var element = document.createElement("input");
+  element.className= "form-control";
+  element.placeholder = placeholder;
+  element.id = "text_box"+id;  //id in letter in put
+  element.onchange = function () {    
+    console.log("New Letter");
+    service = interpret(stateMachine).start();
+    service.send("INPUT_CHANGE", {
+      value: element.target.value,
+      name: element.target.name
+    });
+  }
+  return element;
 }
 export const makeLetters = function(data){
     var domElement="";
@@ -70,9 +81,8 @@ export const makeLetters = function(data){
     }
 }
 
-export const readSetGo = async function(){
-
-    document.getElementById("start_btn").style.display = "none";
+export const readSetGo = function(){
+  document.getElementById("start_btn").style.display = "none";
 
   var ml4 = {};
   ml4.opacityIn = [0,1];
@@ -132,6 +142,8 @@ export const readSetGo = async function(){
         nextImage();
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
+        console.log("starting game");
+        gameOn();
 
-    },6000 );
+    },6000 );    
 }

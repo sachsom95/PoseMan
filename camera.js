@@ -28,7 +28,6 @@ const levelInfo = {
 //This function will collect the Json file for particular level
 //Since we need to use xmlhttp I had to make it async
 async function getOutput(){
-
   await readJson(levelInfo.easy);
   console.log(`data for level collected`)
 }
@@ -121,7 +120,7 @@ let brain;
 let skeleton;
 let poseLabel = "Nothing yet!";
 
-
+//This function sends the letter to the input letter hold
 function draw() {
   // console.log('Drawing!');
   document.getElementById('image-label').innerHTML = poseLabel;
@@ -342,7 +341,7 @@ export async function bindPage() {
   // attach evenListner to our start button start_btn
   var p = document.getElementById("start_btn"); // Find the paragraph element in the page
   p.onclick = readSetGo;
-  posenet = await posenet_module.load({
+    posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,
     inputResolution: defaultInputResolution,
@@ -368,7 +367,8 @@ export async function bindPage() {
   
   // toggleLoadingUI(false);
   setupModel();
-  allSet().then(gameOn);
+  // allSet().then(gameOn);
+  console.log("af")
   detectPoseInRealTime(video, posenet);
 }
 
@@ -389,7 +389,7 @@ async function parseSVG(target) {
 loadModel();
 bindPage();
 startCountdown();
-gameOn();
+// gameOn();
 getOutput();
 // setTimeout(() =>{
   

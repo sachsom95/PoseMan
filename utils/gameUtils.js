@@ -1,10 +1,24 @@
 import {gameOn} from './gamePlay.js';
 import {Machine, interpret, assign} from "xstate";
+import {stateMachine} from '../stateMachine.js';
 
 // contains all used images
 export var lst = [];
 // stores levelJson data
 export var levelData;
+
+export let service;
+export let answer;
+export let userAnswer;
+
+function compareStrings(letter, id){
+  if(answer.charAt(id) == letter) {
+    document.getElementById("text_box"+id).style.backgroundColor = "green";
+  } else {
+    document.getElementById("text_box"+id).style.backgroundColor = "red";
+  }
+}
+
 
 // getRandom image without repetition
 export const getImage = function() {
@@ -24,8 +38,20 @@ export function nextImage(){
     var index = getImage();
     imageVisitied(index);
     var image = levelData[index];
-    var url = './images/' + image;    
+    var url = './images/' + image;
+    //Grabs name of file as answer:    
     console.log(image.slice(0,image.indexOf(".")));
+    answer = image.slice(0,image.indexOf("."));
+    // service = interpret(stateMachine).start();
+    // service.send("INPUT_CHANGE", {
+    //   name: "answer",
+    //   value: image.slice(0,image.indexOf("."))      
+    // });
+
+    // service = interpret(stateMachine).onTransition(current => {
+    //   state=current
+    //   console.log(current);
+    // });    
     console.log(url);
     document.getElementById("guess_image").src = url;
     makeLetters(3);
@@ -65,11 +91,12 @@ const helperMakeLetter = function(id,placeholder){
   element.id = "text_box"+id;  //id in letter in put
   element.onchange = function () {    
     console.log("New Letter");
-    service = interpret(stateMachine).start();
-    service.send("INPUT_CHANGE", {
-      value: element.target.value,
-      name: element.target.name
-    });
+    compareStrings(element.value,id);
+    // service = interpret(stateMachine).start();
+    // service.send("INPUT_CHANGE", {
+    //   value: element.target.value,
+    //   name: element.target.name
+    // });
   }
   return element;
 }

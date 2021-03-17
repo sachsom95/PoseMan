@@ -32,7 +32,7 @@ export function insertInputText(label) {
   console.log("text_box"+counter);
   console.log(label);
   document.getElementById("text_box"+counter).value = label;
-  // compareStrings(document.getElementById("text_box"+counter).value, counter); //Comment this to input text by hand and not through model
+  compareStrings(document.getElementById("text_box"+counter).value, counter); //Comment this to input text by hand and not through model
 }
 
 // getRandom image without repetition

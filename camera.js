@@ -16,7 +16,7 @@ import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 // import {Machine, interpret,assign} from "xstate";
 // import {stateMachine} from './stateMachine.js';
 
-import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText,loaded} from './utils/gameUtils.js'
 import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
 import {allSet,readyState} from './utils/readyState.js'
 // levels info
@@ -131,7 +131,7 @@ function setupModel() {
   poseNet.on('pose', gotPoses);
 }
 
-function loadModel() {
+export function loadModel() {
   let options = {
     inputs: 34,
     outputs: 7,
@@ -173,7 +173,9 @@ function gotResult(error, results) {
     poseLabel = results[0].label.toUpperCase();
     // console.log(poseLabel);
     draw();
-    insertInputText(poseLabel);
+    if(Boolean(loaded)) {
+      insertInputText(poseLabel);
+    }    
   } 
   classifyPose();
 }

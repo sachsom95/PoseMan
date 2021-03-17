@@ -1,4 +1,4 @@
-import {gameOn} from './gamePlay.js';
+import {loadModel} from '../camera.js';
 // import {Machine, interpret, assign} from "xstate";
 // import {stateMachine} from '../stateMachine.js';
 
@@ -11,6 +11,7 @@ export var levelData;
 export let answer;
 export let userAnswer;
 var counter = 0;
+export let loaded = false;
 
 function compareStrings(letter, id){
   console.log('Comparing');
@@ -31,7 +32,7 @@ export function insertInputText(label) {
   console.log("text_box"+counter);
   console.log(label);
   document.getElementById("text_box"+counter).value = label;
-  // compareStrings(document.getElementById("text_box"+counter).value, counter); //Comment this to input text by hand and not through model
+  compareStrings(document.getElementById("text_box"+counter).value, counter); //Comment this to input text by hand and not through model
 }
 
 // getRandom image without repetition
@@ -71,6 +72,7 @@ export function nextImage(){
     console.log(url);
     document.getElementById("guess_image").src = url;
     makeLetters(3);
+    loaded = true;
 }
 
 // helper inner function
@@ -195,7 +197,7 @@ export const readSetGo = function(){
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
         console.log("starting game");
-        // gameOn();
+        // loadModel();
 
     },6000 );    
 }

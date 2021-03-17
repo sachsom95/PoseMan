@@ -16,7 +16,7 @@ import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 // import {Machine, interpret,assign} from "xstate";
 // import {stateMachine} from './stateMachine.js';
 
-import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText} from './utils/gameUtils.js'
 import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
 import {allSet,readyState} from './utils/readyState.js'
 // levels info
@@ -28,7 +28,6 @@ const levelInfo = {
 //This function will collect the Json file for particular level
 //Since we need to use xmlhttp I had to make it async
 async function getOutput(){
-
   await readJson(levelInfo.easy);
   console.log(`data for level collected`)
 }
@@ -121,9 +120,8 @@ let brain;
 let skeleton;
 let poseLabel = "Nothing yet!";
 
-
-function draw() {
-  // console.log('Drawing!');
+//This function sends the letter to the input letter hold
+function draw() {  
   document.getElementById('image-label').innerHTML = poseLabel;
 }
 
@@ -173,8 +171,9 @@ function classifyPose() {
 function gotResult(error, results) { 
   if (results[0].confidence > 0.80) {
     poseLabel = results[0].label.toUpperCase();
-    console.log(poseLabel);
+    // console.log(poseLabel);
     draw();
+    insertInputText(poseLabel);
   } 
   classifyPose();
 }
@@ -191,37 +190,6 @@ function modelLoaded() {
   var splash = document.getElementById("loader");
   splash.classList.add('display-none');
 }
-
-
-// //Gameplay
-// let testString = "YMCA";
-// let userAnswer = "";
-// let service;
-
-// function gameOn() {
-//   service = interpret(stateMachine).start();  
-//   service.onTransition(current => {
-//     console.log(current);
-//   });
-//   document.getElementById('startButton').addEventListener('click', function () {
-//       // function handleSubmit () {
-//         console.log(stateMachine.states);
-//         console.log("Submitting");
-//         service.send("SUBMIT");
-//       // }
-//     }); 
-// }
-
-// function startCountdown() {
-//   var timeleft = 10;
-//   var downloadTimer = setInterval(function(){
-//     if(timeleft <= 0){
-//       clearInterval(downloadTimer);
-//     }
-//     document.getElementById("progressBar").value = 10 - timeleft;
-//     timeleft -= 1;
-//   }, 1000);
-// }
 
 
 //SVG animation
@@ -342,7 +310,7 @@ export async function bindPage() {
   // attach evenListner to our start button start_btn
   var p = document.getElementById("start_btn"); // Find the paragraph element in the page
   p.onclick = readSetGo;
-  posenet = await posenet_module.load({
+    posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,
     inputResolution: defaultInputResolution,
@@ -368,7 +336,7 @@ export async function bindPage() {
   
   // toggleLoadingUI(false);
   setupModel();
-  allSet().then(gameOn);
+  // allSet().then(gameOn);
   detectPoseInRealTime(video, posenet);
 }
 
@@ -388,8 +356,8 @@ async function parseSVG(target) {
 
 loadModel();
 bindPage();
-startCountdown();
-gameOn();
+// startCountdown();
+// gameOn();
 getOutput();
 // setTimeout(() =>{
   

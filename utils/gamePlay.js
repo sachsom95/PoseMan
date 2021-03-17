@@ -6,17 +6,21 @@ export let userAnswer = "";
 export let service;
 
 export function gameOn() {
-  service = interpret(stateMachine).start();  
+  service = interpret(stateMachine).start();
+  service.send("SUBMIT");
+  console.log("Submitting");  
   service.onTransition(current => {
+    console.log("transition");
     console.log(current);
   });
-  document.getElementById('startButton').addEventListener('click', function () {
-      // function handleSubmit () {
-        console.log(stateMachine.states);
-        console.log("Submitting");
-        service.send("SUBMIT");
-      // }
-    }); 
+  
+  // document.getElementById('startButton').addEventListener('click', function () {
+  //     // function handleSubmit () {
+  //       console.log(stateMachine.states);
+  //       console.log("Submitting");
+  //       service.send("SUBMIT");
+  //     // }
+  //   }); 
 }
 
 export function startCountdown() {

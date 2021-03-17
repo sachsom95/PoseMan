@@ -1,6 +1,8 @@
 export default function gamePlay(answer, userAnswer) {
     return new Promise((resolve, reject) => {
       console.log("playing...");
+      console.log(answer);
+      console.log(userAnswer);
 
       setTimeout(() => { //Timed play!
         //If we win before:

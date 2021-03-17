@@ -1,7 +1,38 @@
+import {gameOn} from './gamePlay.js';
+// import {Machine, interpret, assign} from "xstate";
+// import {stateMachine} from '../stateMachine.js';
+
 // contains all used images
 export var lst = [];
 // stores levelJson data
 export var levelData;
+
+// export let service;
+export let answer;
+export let userAnswer;
+var counter = 0;
+
+function compareStrings(letter, id){
+  console.log('Comparing');
+  if(answer.charAt(id) == letter) {
+    document.getElementById("text_box"+id).style.backgroundColor = "green";
+    ++counter;
+  } else {
+    document.getElementById("text_box"+id).style.backgroundColor = "red";
+  }
+
+  if(counter == 3) {
+    clearLetters();
+    nextImage();
+  }
+}
+
+export function insertInputText(label) {
+  console.log("text_box"+counter);
+  console.log(label);
+  document.getElementById("text_box"+counter).value = label;
+  // compareStrings(document.getElementById("text_box"+counter).value, counter); //Comment this to input text by hand and not through model
+}
 
 // getRandom image without repetition
 export const getImage = function() {
@@ -18,10 +49,25 @@ export const imageVisitied = function (data){
 
 export function nextImage(){
     console.log("came to next image function");
+    counter = 0;
     var index = getImage();
     imageVisitied(index);
     var image = levelData[index];
     var url = './images/' + image;
+    //Grabs name of file as answer:    
+    console.log(image.slice(0,image.indexOf(".")));
+    answer = image.slice(0,image.indexOf(".")).toUpperCase();
+    
+    // service = interpret(stateMachine).start();
+    // service.send("INPUT_CHANGE", {
+    //   name: "answer",
+    //   value: image.slice(0,image.indexOf("."))      
+    // });
+
+    // service = interpret(stateMachine).onTransition(current => {
+    //   state=current
+    //   console.log(current);
+    // });    
     console.log(url);
     document.getElementById("guess_image").src = url;
     makeLetters(3);
@@ -51,17 +97,34 @@ export const readJson =  function(url){
 
 
 
-
 // This two function will generate the text boxes put number in to @data to make that many 
 // text boxes 
+// Onchange = Updates the new letter from the input
 const helperMakeLetter = function(id,placeholder){
-    var element = document.createElement("input");
-    element.className= "form-control";
-    element.placeholder = placeholder;
-    element.id = "text_box"+id;
+  var element = document.createElement("input");
+  element.className= "form-control";
+  element.placeholder = placeholder;
+  element.id = "text_box"+id;  //id in letter in put
+  element.onchange = function () {    
+    console.log("New Letter");
+    compareStrings(element.value,id); //Text input by hand change if not commented
 
-    return element;
+    // service = interpret(stateMachine).start();
+    // service.send("INPUT_CHANGE", {
+    //   value: element.target.value,
+    //   name: element.target.name
+    // });
+  }
+  return element;
 }
+
+export const clearLetters = function(){  
+    var list = document.getElementById("word_list");
+    while (list.firstChild) {
+      list.removeChild(list.lastChild);
+    }
+}
+
 export const makeLetters = function(data){
     var domElement="";
     for(var i = 0; i < data; i++){
@@ -70,9 +133,8 @@ export const makeLetters = function(data){
     }
 }
 
-export const readSetGo = async function(){
-
-    document.getElementById("start_btn").style.display = "none";
+export const readSetGo = function(){
+  document.getElementById("start_btn").style.display = "none";
 
   var ml4 = {};
   ml4.opacityIn = [0,1];
@@ -132,6 +194,8 @@ export const readSetGo = async function(){
         nextImage();
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
+        console.log("starting game");
+        // gameOn();
 
-    },6000 );
+    },6000 );    
 }

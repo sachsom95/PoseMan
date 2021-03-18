@@ -311,6 +311,7 @@ export function sound(src) {
   this.play = function(){
     this.sound.play();
   }
+  this.sound.loop = false;    
   this.stop = function(){
     this.sound.pause();
   }

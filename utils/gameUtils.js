@@ -29,6 +29,8 @@ function compareStrings(letter, id){
   console.log('Comparing');
   if(answer.charAt(id) == letter) {
     document.getElementById("text_box"+id).style.backgroundColor = "green";
+    var soundNew = new sound('./sounds/confirmation_001.ogg');
+    soundNew.play(); 
     ++counter;
   } else {
     document.getElementById("text_box"+id).style.backgroundColor = "red";
@@ -49,7 +51,7 @@ export function insertInputText(label) {
     input = document.getElementById("text_box"+counter);    
   }  
   input.value = label;   
-  compareStrings(input.value, counter); 
+  // compareStrings(input.value, counter); 
   //Comment this to input text by hand and not through model
 }
 
@@ -72,6 +74,8 @@ export function nextImage(){
     console.log("came to next image function");
     counter = 0;
     var index = getImage();
+    var soundNew = new sound('./sounds/nextImage.mp3');
+    soundNew.play(); 
 
     //Not sure if this is how we know game over cause end of images(???)
     if(index == -1) playing = false;
@@ -231,8 +235,6 @@ export const readSetGo = function(){
         var soundBackground = new sound('./sounds/background.mp3');
         // soundBackground.play();
         soundBackground.loop = true;
-        while(playing) {
-          soundBackground.play();
-        }        
+        soundBackground.play();                
     },6000 );    
 }

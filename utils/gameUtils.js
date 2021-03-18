@@ -1,4 +1,3 @@
-import {loadModel} from '../camera.js';
 // import {Machine, interpret, assign} from "xstate";
 // import {stateMachine} from '../stateMachine.js';
 

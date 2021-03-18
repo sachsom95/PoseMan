@@ -1,6 +1,7 @@
-import {loadModel} from '../camera.js';
 // import {Machine, interpret, assign} from "xstate";
 // import {stateMachine} from '../stateMachine.js';
+
+import {sound} from  '../camera.js';
 
 // contains all used images
 export var lst = [];
@@ -9,14 +10,27 @@ export var levelData;
 
 // export let service;
 export let answer;
+export let placeholder;
 export let userAnswer;
 var counter = 0;
 export let loaded = false;
+var playing = true;
+
+
+
+
+export function makeSound() {
+  var soundNew = new sound('./sounds/ready.mp3');
+  soundNew.play(); 
+}
+
 
 function compareStrings(letter, id){
   console.log('Comparing');
   if(answer.charAt(id) == letter) {
     document.getElementById("text_box"+id).style.backgroundColor = "green";
+    var soundNew = new sound('./sounds/confirmation_001.ogg');
+    soundNew.play(); 
     ++counter;
   } else {
     document.getElementById("text_box"+id).style.backgroundColor = "red";
@@ -31,14 +45,20 @@ function compareStrings(letter, id){
 export function insertInputText(label) {
   console.log("text_box"+counter);
   console.log(label);
-  document.getElementById("text_box"+counter).value = label;
-  compareStrings(document.getElementById("text_box"+counter).value, counter); //Comment this to input text by hand and not through model
+  let input = document.getElementById("text_box"+counter);
+  while(input.placeholder != '_'){
+    ++counter;
+    input = document.getElementById("text_box"+counter);    
+  }  
+  input.value = label;   
+  compareStrings(input.value, counter); 
+  //Comment this to input text by hand and not through model
 }
 
 // getRandom image without repetition
 export const getImage = function() {
     do{
-        var x =  Math.floor(Math.random()*11);
+        var x =  Math.floor(Math.random()*4);
     }
     while(lst.indexOf(String(x)) != -1);
     return x;
@@ -48,12 +68,22 @@ export const imageVisitied = function (data){
     lst.push(String(data));
 }
 
+
+//For background sound to stop global variable needs to be turned to false
 export function nextImage(){
     console.log("came to next image function");
     counter = 0;
     var index = getImage();
+    var soundNew = new sound('./sounds/nextImage.mp3');
+    soundNew.play(); 
+
+    //Not sure if this is how we know game over cause end of images(???)
+    if(index == -1) playing = false;
+
     imageVisitied(index);
-    var image = levelData[index];
+    console.log(levelData[0].name);
+    var image = levelData[index].name;
+    placeholder = levelData[index].placeholder;    
     var url = './images/' + image;
     //Grabs name of file as answer:    
     console.log(image.slice(0,image.indexOf(".")));
@@ -71,12 +101,13 @@ export function nextImage(){
     // });    
     console.log(url);
     document.getElementById("guess_image").src = url;
-    makeLetters(3);
+    makeLetters(answer.length);
     loaded = true;
 }
 
 // helper inner function
 function passJson(data){
+    console.log(data)
     levelData = data;
 }
 
@@ -84,17 +115,17 @@ function passJson(data){
 export const readJson =  function(url){
     return new Promise((resolve,reject)=>{
         var xmlhttp = new XMLHttpRequest();
+        console.log(url)
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
         xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var myArr = JSON.parse(this.responseText);
+            var myArr = JSON.parse(this.responseText);            
             passJson(myArr);
             resolve();
             }
         };
-    })
-    
+    })    
 }
 
 
@@ -130,21 +161,25 @@ export const clearLetters = function(){
 export const makeLetters = function(data){
     var domElement="";
     for(var i = 0; i < data; i++){
-        domElement = helperMakeLetter(i,"_");  
+        domElement = helperMakeLetter(i,placeholder.charAt(i));  
         document.getElementById("word_list").appendChild(domElement);
     }
 }
 
 export const readSetGo = function(){
   document.getElementById("start_btn").style.display = "none";
+  makeSound();
 
   var ml4 = {};
-  ml4.opacityIn = [0,1];
+  ml4.opacityIn = [0, 1];
   ml4.scaleIn = [0.2, 1];
   ml4.scaleOut = 3;
-  ml4.durationIn = 800;
-  ml4.durationOut = 600;
-  ml4.delay = 500;
+  // ml4.durationIn = 800;
+  // ml4.durationOut = 600;
+  ml4.durationIn = 600;
+  ml4.durationOut = 400;
+  // ml4.delay = 500;
+  ml4.delay = 400;
   
   anime.timeline({loop: false})
     .add({
@@ -197,7 +232,9 @@ export const readSetGo = function(){
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
         console.log("starting game");
-        // loadModel();
-
+        var soundBackground = new sound('./sounds/background.mp3');
+        // soundBackground.play();
+        soundBackground.loop = true;
+        soundBackground.play();                
     },6000 );    
 }

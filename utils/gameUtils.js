@@ -1,6 +1,8 @@
 // import {Machine, interpret, assign} from "xstate";
 // import {stateMachine} from '../stateMachine.js';
 
+import {sound} from  '../camera.js';
+
 // contains all used images
 export var lst = [];
 // stores levelJson data
@@ -12,6 +14,16 @@ export let placeholder;
 export let userAnswer;
 var counter = 0;
 export let loaded = false;
+var playing = true;
+
+
+
+
+export function makeSound() {
+  var soundNew = new sound('./sounds/ready.mp3');
+  soundNew.play(); 
+}
+
 
 function compareStrings(letter, id){
   console.log('Comparing');
@@ -54,10 +66,16 @@ export const imageVisitied = function (data){
     lst.push(String(data));
 }
 
+
+//For background sound to stop global variable needs to be turned to false
 export function nextImage(){
     console.log("came to next image function");
     counter = 0;
     var index = getImage();
+
+    //Not sure if this is how we know game over cause end of images(???)
+    if(index == -1) playing = false;
+
     imageVisitied(index);
     console.log(levelData[0].name);
     var image = levelData[index].name;
@@ -146,14 +164,18 @@ export const makeLetters = function(data){
 
 export const readSetGo = function(){
   document.getElementById("start_btn").style.display = "none";
+  makeSound();
 
   var ml4 = {};
-  ml4.opacityIn = [0,1];
+  ml4.opacityIn = [0, 1];
   ml4.scaleIn = [0.2, 1];
   ml4.scaleOut = 3;
-  ml4.durationIn = 800;
-  ml4.durationOut = 600;
-  ml4.delay = 500;
+  // ml4.durationIn = 800;
+  // ml4.durationOut = 600;
+  ml4.durationIn = 600;
+  ml4.durationOut = 400;
+  // ml4.delay = 500;
+  ml4.delay = 400;
   
   anime.timeline({loop: false})
     .add({
@@ -206,7 +228,11 @@ export const readSetGo = function(){
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
         console.log("starting game");
-        // loadModel();
-
+        var soundBackground = new sound('./sounds/background.mp3');
+        // soundBackground.play();
+        soundBackground.loop = true;
+        while(playing) {
+          soundBackground.play();
+        }        
     },6000 );    
 }

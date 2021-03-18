@@ -23,8 +23,6 @@
   "scripts": {
     "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --open --no-source-maps",
     "build": "cross-env NODE_ENV=production parcel build index.html --no-source-maps --public-url ./",
-    "postbuild": "cp -R resources/{model,levels,images} dist/",
-    "build-camera": "cross-env NODE_ENV=production parcel build camera.html --public-url ./",
     "lint": "eslint .",
     "link-local": "yalc link"
   },

@@ -300,6 +300,23 @@ function setupCanvas() {
   canvasScope.setup(canvas);
 }
 
+//Creates new sound object and inserts it into the html
+export function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function(){
+    this.sound.play();
+  }
+  this.sound.loop = false;    
+  this.stop = function(){
+    this.sound.pause();
+  }
+}
+
 /**
  * Kicks off the game by loading the posenet model, finding and loading
  * available camera devices, and setting off the detectPoseInRealTime function.

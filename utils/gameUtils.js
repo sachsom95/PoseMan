@@ -51,7 +51,7 @@ export function insertInputText(label) {
     input = document.getElementById("text_box"+counter);    
   }  
   input.value = label;   
-  // compareStrings(input.value, counter); 
+  compareStrings(input.value, counter); 
   //Comment this to input text by hand and not through model
 }
 

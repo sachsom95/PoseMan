@@ -370,4 +370,4 @@ getOutput();
 // },20000 )
 
 
-document.getElementById("timer").innerHTML=countDown(100))
+countDown(100)

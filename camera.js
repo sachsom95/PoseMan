@@ -370,4 +370,4 @@ getOutput();
 // },20000 )
 
 
-countDown(100)
+countDown(30);

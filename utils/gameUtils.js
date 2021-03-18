@@ -198,6 +198,6 @@ export const readSetGo = function(){
         document.getElementById("word1").style.visibility = "visible";
         console.log("starting game");
         // loadModel();
-
+        
     },6000 );    
 }

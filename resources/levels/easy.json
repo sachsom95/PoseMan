@@ -1,6 +1,18 @@
 {
-    "0": "cat.png",
-    "1": "bat.png",
-    "2": "tomato.png",
-    "3": "toy.png"
+    "0": {
+        "name": "cat.png",
+        "placeholder": "___"
+    },
+    "1": {
+        "name": "bat.png",
+        "placeholder": "B__"
+    },
+    "2": {
+        "name": "tomato.png",
+        "placeholder": "___ATO"
+    },
+    "3": {
+        "name": "toy.png",
+        "placeholder": "___"
+    }
 }

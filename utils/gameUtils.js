@@ -31,7 +31,7 @@ export function makeSound() {
 
 
 function compareStrings(letter, id){
-  console.log('Comparing');
+  // console.log('Comparing');
   if(answer.charAt(id) == letter) {
     document.getElementById("text_box"+id).style.backgroundColor = "green";
     var soundNew = new sound('./sounds/confirmation_001.ogg');
@@ -51,7 +51,7 @@ function compareStrings(letter, id){
 
 export function insertInputText(label) {
   console.log("text_box"+counter);
-  console.log(label);
+  // console.log(label);
   let input = document.getElementById("text_box"+counter);
   while(input.placeholder != '_'){
     ++counter;
@@ -249,9 +249,9 @@ export const readSetGo = function(){
 
 
 export const startAgain = function(){
-  document.getElementById("start_words").style.display = "block";
-  document.getElementById("guess_image").style.display = "block";
-  document.getElementById("word_list").style.display = "inline"
+  // document.getElementById("start_words").style.display = "block";
+  // document.getElementById("guess_image").style.display = "block";
+  // document.getElementById("word_list").style.display = "inline"
   document.getElementById("replay_btn").style.visibility = "hidden";
   readSetGo();
 }

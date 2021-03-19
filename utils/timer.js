@@ -1,4 +1,4 @@
-import {Timer} from "easytimer.js"
+import {TimeCounter, Timer} from "easytimer.js"
 
 var timer = new Timer();
 const easy = 30;
@@ -13,5 +13,10 @@ export const countDown = function(){
     timer.addEventListener('secondsUpdated',function(e){
         timer_div.innerHTML = timer.getTimeValues().toString(['minutes','seconds']);
         console.log(`time:${timer.getTimeValues().toString()}`)
+    });
+
+
+    timer.addEventListener('targetAchieved',function(e){
+        console.log("INVOKE GAMEOVER HERE")
     })
-}
+};

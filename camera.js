@@ -12,11 +12,10 @@ import {FileUtils} from './utils/fileUtils';
 import * as girlSVG from './resources/illustration/girl.svg';
 import * as boySVG from './resources/illustration/boy.svg';
 import { ComposableTask, loadMtcnnModel } from 'face-api.js';
-
 // import {Machine, interpret,assign} from "xstate";
 // import {stateMachine} from './stateMachine.js';
 
-import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText,loaded} from './utils/gameUtils.js'
+import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText,loaded,startAgain} from './utils/gameUtils.js'
 import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
 import {allSet,readyState} from './utils/readyState.js'
 // levels info
@@ -328,7 +327,10 @@ export async function bindPage() {
   setStatusText('Loading the models...');
   // attach evenListner to our start button start_btn
   var p = document.getElementById("start_btn"); // Find the paragraph element in the page
+  var p_reset = document.getElementById("replay_btn"); // Find the paragraph element in the page
+
   p.onclick = readSetGo;
+  p_reset.onclick =startAgain;
     posenet = await posenet_module.load({
     architecture: defaultPoseNetArchitecture,
     outputStride: defaultStride,

@@ -1,5 +1,5 @@
 import {TimeCounter, Timer} from "easytimer.js"
-import {soundBackground} from './gameUtils.js'
+
 var timer = new Timer();
 const easy = 10;
 const medium = 20;
@@ -19,17 +19,20 @@ export const countDown = function(){
     timer.addEventListener('targetAchieved',function(e){
         timer_div.innerHTML = "Final Score is : 100";
         // console.log("INVOKE GAMEOVER HERE");
-        gameOver();
+        // gameOver();
     })
 };
 
 
 
 export const gameOver = function(){
+    document.getElementById("start_words").style.visibility = "hidden";
+
     document.getElementById("right_game_window_h1").innerHTML = "Game Over!";
     document.getElementById("right_game_window_p").innerHTML ="Your all streached and ready for next round of coding. Good luck Soldier :)";
-    document.getElementById("guess_image").style.display = "None";
-    document.getElementById("word_list").style.display = "None"
-    soundBackground.stop();
+    document.getElementById("guess_image").style.visibility = "hidden";
+    document.getElementById("word_list").style.visibility = "hidden"
+    document.getElementById("replay_btn").style.visibility = "visible";
 
 }
+

@@ -226,3 +226,7 @@ header {
       font-size: xx-large;
       font-family:inherit;
   }
+
+  #replay_btn{
+    visibility: hidden;
+  }

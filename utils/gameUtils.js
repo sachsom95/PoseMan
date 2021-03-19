@@ -242,3 +242,10 @@ export const readSetGo = function(){
 }
 
 
+export const startAgain = function(){
+  document.getElementById("start_words").style.display = "block";
+  document.getElementById("guess_image").style.display = "block";
+  document.getElementById("word_list").style.display = "inline"
+  document.getElementById("replay_btn").style.visibility = "hidden";
+  readSetGo();
+}

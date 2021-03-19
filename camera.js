@@ -2,6 +2,7 @@ import * as posenet_module from '@tensorflow-models/posenet';
 import * as facemesh_module from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs';
 import * as paper from 'paper';
+import firebase from "firebase/app";
 
 import {drawKeypoints, drawPoint, drawSkeleton, isMobile, toggleLoadingUI, setStatusText} from './utils/demoUtils';
 import {SVGUtils} from './utils/svgUtils'
@@ -15,7 +16,7 @@ import { ComposableTask, loadMtcnnModel } from 'face-api.js';
 // import {Machine, interpret,assign} from "xstate";
 // import {stateMachine} from './stateMachine.js';
 
-
+import {firebaseConfig} from './utils/config.js'
 import {getImage,lst,levelData,imageVisitied,passJson,readJson,nextImage,readSetGo,insertInputText,loaded,startAgain} from './utils/gameUtils.js'
 import {gameOn,startCountdown,testString,userAnswer,service} from './utils/gamePlay.js'
 import {allSet,readyState} from './utils/readyState.js'
@@ -132,9 +133,10 @@ function setupModel() {
 }
 
 export function loadModel() {
+  firebase.initializeApp(firebaseConfig);
   let options = {
     inputs: 34,
-    outputs: 7,
+    outputs: 6,
     task: 'classification',
     debug: true
   }
@@ -153,7 +155,7 @@ function brainLoaded() {
 }
 
 function classifyPose() {
-  // console.log('Classify pose');
+  console.log('Classify pose');
   if (pose) {
     let inputs = [];
     for (let i = 0; i < pose.keypoints.length; i++) {
@@ -161,7 +163,7 @@ function classifyPose() {
       let y = pose.keypoints[i].position.y;
       inputs.push(x);
       inputs.push(y);
-    }
+    }    
     brain.classify(inputs, gotResult);
   } else {
     setTimeout(classifyPose, 100);
@@ -169,15 +171,20 @@ function classifyPose() {
 }
 
 function gotResult(error, results) { 
-  if (results[0].confidence > 0.80) {
-    poseLabel = results[0].label.toUpperCase();
-    // console.log(poseLabel);
-    draw();
-    if(Boolean(loaded)) {
-      insertInputText(poseLabel);
-    }    
-  } 
-  classifyPose();
+  console.log("result");
+  if(results === undefined) {
+    classifyPose();
+  } else {
+    if (results[0].confidence > 0.80) {
+      poseLabel = results[0].label.toUpperCase();
+      // console.log(poseLabel);
+      draw();
+      if(Boolean(loaded)) {
+        insertInputText(poseLabel);
+      }    
+    } 
+    classifyPose();
+  }
 }
 
 function gotPoses(poses) {

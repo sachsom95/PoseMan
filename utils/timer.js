@@ -37,10 +37,10 @@ export const gameOver = function(){
     soundBackground.stop();
     soundCheers.play();
     // document.getElementById("start_words").style.visibility = "hidden";
-	  var input = document.getElementById("word_list");
-	  input.innerHTML="";
+	var input = document.getElementById("word_list");
+	input.innerHTML="";
     document.getElementById("right_game_window_h1").innerHTML = "Game Over!";
-    document.getElementById("right_game_window_p").innerHTML ="Your all streached and ready for next round of coding. Good luck Soldier :)";
+    document.getElementById("right_game_window_p").innerHTML ="You are all stretched out and ready for next round of coding. Good luck Soldier :)";
     // document.getElementById("guess_image").style.visibility = "hidden";
     // document.getElementById("word_list").style.visibility = "hidden"
     document.getElementById("replay_btn").style.visibility = "visible";
@@ -52,13 +52,11 @@ export const gameOver = function(){
 function saveScore(userName, scoreDone) {
     // Initialize Firebase
     var x =  Math.floor(Math.random()*100);
-    firebase.initializeApp(firebaseConfig);
     var database = firebase.database();
     firebase.database().ref('users/' + 'user'+x).set({
         name: userName,
         score: scoreDone
       });
-}
 }
 
 

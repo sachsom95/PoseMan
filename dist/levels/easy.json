@@ -1,0 +1,18 @@
+{
+    "0": {
+        "name": "cat.png",
+        "placeholder": "___"
+    },
+    "1": {
+        "name": "bat.png",
+        "placeholder": "B__"
+    },
+    "2": {
+        "name": "tomato.png",
+        "placeholder": "___ATO"
+    },
+    "3": {
+        "name": "toy.png",
+        "placeholder": "___"
+    }
+}

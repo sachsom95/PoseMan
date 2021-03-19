@@ -1,6 +1,6 @@
 // import {Machine, interpret, assign} from "xstate";
 // import {stateMachine} from '../stateMachine.js';
-
+import {countDown} from './timer.js'
 import {sound} from  '../camera.js';
 
 // contains all used images
@@ -235,6 +235,8 @@ export const readSetGo = function(){
         var soundBackground = new sound('./sounds/background.mp3');
         // soundBackground.play();
         soundBackground.loop = true;
-        soundBackground.play();                
-    },6000 );    
+        soundBackground.play();  
+        countDown();
+              
+    },4500 );    
 }

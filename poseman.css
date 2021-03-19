@@ -219,3 +219,10 @@ header {
     right: 0;
     opacity: 0; 
   }
+
+
+  /* Timer */
+  #timer{
+      font-size: xx-large;
+      font-family:inherit;
+  }

@@ -16,6 +16,7 @@
     "@tensorflow/tfjs-core": "^1.7.0",
     "easytimer.js": "^4.3.4",
     "face-api.js": "^0.22.1",
+    "firebase": "^8.3.1",
     "paper": "^0.12.1",
     "parcel-plugin-static-files-copy": "^2.5.1",
     "xstate": "4.6.7"

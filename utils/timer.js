@@ -59,7 +59,7 @@ function saveScore(userName, scoreDone) {
         score: scoreDone
       });
 }
-}
+
 
 
 var confetti = {

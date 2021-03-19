@@ -1,7 +1,7 @@
 import {TimeCounter, Timer} from "easytimer.js"
 
 var timer = new Timer();
-const easy = 30;
+const easy = 10;
 const medium = 20;
 const hard = 15;
 var timer_div = document.getElementById("timer");
@@ -17,6 +17,15 @@ export const countDown = function(){
 
 
     timer.addEventListener('targetAchieved',function(e){
-        console.log("INVOKE GAMEOVER HERE")
+        timer_div.innerHTML = "GAME OVER";
+        console.log("INVOKE GAMEOVER HERE");
+        gameOver();
     })
 };
+
+
+
+export const gameOver = function(){
+    document.getElementById("right_game_window_h1").innerHTML = "Game Over!";
+    document.getElementById("right_game_window_p").innerHTML ="Your Final Score is :100, You'r have done your stretches and ready to get back to your coding session. Good luck Soldier :)";
+}

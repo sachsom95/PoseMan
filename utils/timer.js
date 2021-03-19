@@ -17,8 +17,8 @@ export const countDown = function(){
 
 
     timer.addEventListener('targetAchieved',function(e){
-        timer_div.innerHTML = "GAME OVER";
-        console.log("INVOKE GAMEOVER HERE");
+        timer_div.innerHTML = "Final Score is : 100";
+        // console.log("INVOKE GAMEOVER HERE");
         gameOver();
     })
 };
@@ -27,5 +27,8 @@ export const countDown = function(){
 
 export const gameOver = function(){
     document.getElementById("right_game_window_h1").innerHTML = "Game Over!";
-    document.getElementById("right_game_window_p").innerHTML ="Your Final Score is :100, You'r have done your stretches and ready to get back to your coding session. Good luck Soldier :)";
+    document.getElementById("right_game_window_p").innerHTML ="Your all streached and ready for next round of coding. Good luck Soldier :)";
+    document.getElementById("guess_image").style.display = "None";
+    document.getElementById("word_list").style.display = "None"
+
 }

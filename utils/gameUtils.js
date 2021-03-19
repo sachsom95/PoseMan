@@ -240,3 +240,5 @@ export const readSetGo = function(){
               
     },4500 );    
 }
+
+

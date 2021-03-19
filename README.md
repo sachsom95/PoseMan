@@ -25,15 +25,32 @@ PoseMan is a Web-game to gameify 5 min breaks after an hour long coding session.
 - A seprate Neural network trained on Poses will try to capture user poses and give outputs.
 - Light weight JS Web application runs right on your browser 
 
+<p align="center">
+<img width="400" alt="Screenshot 2021-02-26 at 01 56 26" src="https://user-images.githubusercontent.com/55349036/111845402-a9647000-88fc-11eb-9806-be0eb8e37a20.gif"></p>
 
 ## Requirements
 
 [yarn](https://classic.yarnpkg.com/en/docs/install) \
 Yarn should be installed on your machine to run the game
+After installing all the dependency 
+add following command to scripts in package.json
+```  
+"postbuild": "cp -R resources/{model,levels,images,sounds} dist/",
+
+```
+Then run `yarn postbuild`
+This should add all the required dependency into bundled folder
 
 ## Game Settings
 
-No additional settings are required for this extension.
+add following command to scripts in package.json
+```  
+"postbuild": "cp -R resources/{model,levels,images,sounds} dist/",
+
+```
+Then run `yarn run`
+This should add all the required dependency into bundled folder
+- Need to give permision to access the browser camera
 
 ## Expanding the game in dev mode
 
@@ -43,13 +60,11 @@ No additional settings are required for this extension.
 yarn
 yarn watch
 ```
+Refer to requirments section about and do yarn postwatch
 
 ## Release Notes
 ### 1.0.0
 Initial release of PoseMan
 
-### For more information
-
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+### License 
+MIT 

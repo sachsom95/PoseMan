@@ -1,5 +1,5 @@
 import {TimeCounter, Timer} from "easytimer.js"
-
+import {soundBackground} from './gameUtils.js'
 var timer = new Timer();
 const easy = 10;
 const medium = 20;
@@ -30,5 +30,6 @@ export const gameOver = function(){
     document.getElementById("right_game_window_p").innerHTML ="Your all streached and ready for next round of coding. Good luck Soldier :)";
     document.getElementById("guess_image").style.display = "None";
     document.getElementById("word_list").style.display = "None"
+    soundBackground.stop();
 
 }

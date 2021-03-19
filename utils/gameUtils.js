@@ -16,6 +16,7 @@ var counter = 0;
 export let loaded = false;
 var playing = true;
 
+export var soundBackground = new sound('./sounds/background.mp3');
 
 
 
@@ -232,7 +233,6 @@ export const readSetGo = function(){
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
         console.log("starting game");
-        var soundBackground = new sound('./sounds/background.mp3');
         // soundBackground.play();
         soundBackground.loop = true;
         soundBackground.play();  

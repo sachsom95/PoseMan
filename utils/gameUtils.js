@@ -3,6 +3,10 @@
 import {countDown} from './timer.js'
 import {sound} from  '../camera.js';
 
+// Score
+export var score = 0;
+
+
 // contains all used images
 export var lst = [];
 // stores levelJson data
@@ -33,6 +37,8 @@ function compareStrings(letter, id){
     var soundNew = new sound('./sounds/confirmation_001.ogg');
     soundNew.play(); 
     ++counter;
+    score += 100;
+    document.getElementById("")
   } else {
     document.getElementById("text_box"+id).style.backgroundColor = "red";
   }

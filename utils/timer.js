@@ -5,7 +5,7 @@ const medium = 20;
 const hard = 15;
 var timer_div = document.getElementById("timer");
 
-
+import {score} from './gameUtils'
 
 export const countDown = function(){
     timer.start({countdown:true,precision:'secondTenths',startValues:{seconds:easy}});
@@ -16,7 +16,7 @@ export const countDown = function(){
 
 
     timer.addEventListener('targetAchieved',function(e){
-        timer_div.innerHTML = "Final Score is : 100";
+        timer_div.innerHTML = `Final Score is : ${score}`;
         confetti.start();
         setTimeout(() =>  {
             confetti.stop();
@@ -36,7 +36,6 @@ export const gameOver = function(){
     document.getElementById("guess_image").style.visibility = "hidden";
     document.getElementById("word_list").style.visibility = "hidden"
     document.getElementById("replay_btn").style.visibility = "visible";
-    confetti.start();
 
 }
 

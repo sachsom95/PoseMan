@@ -17,7 +17,7 @@ export let answer;
 export let placeholder;
 export let userAnswer;
 var counter = 0;
-export let loaded = false;
+export var loaded = false;
 var playing = true;
 
 export var soundBackground = new sound('./sounds/background.mp3');
@@ -110,6 +110,7 @@ export function nextImage(){
     document.getElementById("guess_image").src = url;
     makeLetters(answer.length);
     loaded = true;
+    console.log(loaded)
 }
 
 // helper inner function
@@ -239,7 +240,6 @@ export const readSetGo = function(){
         document.getElementById("guess_image").style.visibility = "visible";
         document.getElementById("word1").style.visibility = "visible";
         console.log("starting game");
-        // soundBackground.play();
         soundBackground.loop = true;
         soundBackground.play();  
         countDown();
@@ -249,6 +249,7 @@ export const readSetGo = function(){
 
 
 export const startAgain = function(){
+  loaded = false;
   // document.getElementById("start_words").style.display = "block";
   // document.getElementById("guess_image").style.display = "block";
   // document.getElementById("word_list").style.display = "inline"

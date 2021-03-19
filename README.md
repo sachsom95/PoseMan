@@ -1,10 +1,38 @@
-PoseMan
+![image](https://user-images.githubusercontent.com/55349036/111832782-1ec64580-88e9-11eb-986b-ef58f0bd9902.png)
 
 
-to run,
+# PoseMan
 
-`yarn`
+PoseMan is a game for you to list all your todo items and collaborate with others on their Todolists.
 
-and then
+## Features
 
-`yarn watch`
+
+
+## Requirements
+
+[yarn](https://classic.yarnpkg.com/en/docs/install) \
+Yarn should be installed on your machine to run the game
+
+## Game Settings
+
+No additional settings are required for this extension.
+
+## Expanding the game in dev mode
+
+- Clone the repository
+- Run the following commands on the terminal
+```
+yarn
+yarn watch
+```
+
+## Release Notes
+### 1.0.0
+Initial release of PoseMan
+
+### For more information
+
+* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+
+**Enjoy!**

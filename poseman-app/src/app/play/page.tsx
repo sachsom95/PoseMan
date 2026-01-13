@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Play, Pause, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Play, Pause, RotateCcw, Github } from 'lucide-react';
 import Link from 'next/link';
 import { useGameStore } from '@/store/game-store';
-import { PoseCamera } from '@/components/pose/pose-camera';
+import { SVGAvatar } from '@/components/pose/svg-avatar';
 import { WordDisplay } from '@/components/game/word-display';
 import { GameTimer } from '@/components/game/game-timer';
 import { ScoreDisplay } from '@/components/game/score-display';
@@ -17,19 +17,20 @@ import { Card } from '@/components/ui/card';
 export default function PlayPage() {
   const {
     status,
-    mode,
     setMode,
     startGame,
     pauseGame,
     resumeGame,
     resetGame,
     detectedLetter,
+    setDetectedLetter,
     guessLetter,
     currentWord,
   } = useGameStore();
 
-  const [countdown, setCountdown] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<string | null>(null);
   const [showGameOver, setShowGameOver] = useState(false);
+  const [isAvatarReady, setIsAvatarReady] = useState(false);
 
   // Set mode to classic on mount
   useEffect(() => {
@@ -54,20 +55,27 @@ export default function PlayPage() {
     }
   }, [status]);
 
-  const handleStart = useCallback(() => {
-    // Start countdown
-    setCountdown(3);
+  const handleLetterDetected = useCallback((letter: string | null, confidence: number) => {
+    setDetectedLetter(letter, confidence);
+  }, [setDetectedLetter]);
 
-    const countdownInterval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev === null || prev <= 1) {
-          clearInterval(countdownInterval);
-          startGame();
-          return null;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  // "Ready Set Go" animation like the original
+  const handleStart = useCallback(() => {
+    const words = ['Ready', 'Set', 'Go!'];
+    let index = 0;
+
+    setCountdown(words[index]);
+
+    const interval = setInterval(() => {
+      index++;
+      if (index >= words.length) {
+        clearInterval(interval);
+        setCountdown(null);
+        startGame();
+      } else {
+        setCountdown(words[index]);
+      }
+    }, 800);
   }, [startGame]);
 
   const handlePlayAgain = useCallback(() => {
@@ -76,158 +84,206 @@ export default function PlayPage() {
   }, [resetGame]);
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black">
+      {/* Header - matching original style */}
+      <header className="p-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-white">PoseMan</h1>
+        <nav className="flex items-center gap-4">
+          <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+            Home
           </Link>
+          <a
+            href="https://github.com/sachsom95/PoseMan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <Github className="w-5 h-5" />
+          </a>
+        </nav>
+      </header>
 
-          <h1 className="text-2xl font-bold text-white">Classic Mode</h1>
+      {/* Main content - split screen like original */}
+      <main className="container mx-auto px-4 pb-8">
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          {/* Left side - Avatar Canvas (larger) */}
+          <div className="lg:col-span-8">
+            <div className="relative aspect-square max-h-[600px] mx-auto rounded-2xl overflow-hidden shadow-2xl">
+              <SVGAvatar
+                className="w-full h-full"
+                onLetterDetected={handleLetterDetected}
+                onReady={() => setIsAvatarReady(true)}
+              />
+            </div>
 
-          <div className="w-20" /> {/* Spacer for centering */}
-        </div>
-
-        {/* Main game area */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Camera feed */}
-          <div className="order-2 lg:order-1">
-            <Card className="overflow-hidden">
-              <PoseCamera className="aspect-[4/3] w-full" />
-            </Card>
-
-            {/* Detected letter indicator */}
-            {status === 'playing' && detectedLetter && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mt-4 text-center"
-              >
-                <p className="text-gray-400 mb-1">Making pose:</p>
-                <p className="text-6xl font-bold text-purple-400">{detectedLetter}</p>
-              </motion.div>
-            )}
+            {/* Detected letter label - like original */}
+            <div className="mt-4 text-center">
+              <AnimatePresence mode="wait">
+                {status === 'playing' && detectedLetter ? (
+                  <motion.div
+                    key={detectedLetter}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="inline-block px-6 py-3 bg-purple-500/20 rounded-xl"
+                  >
+                    <span className="text-gray-400 text-sm">Detected: </span>
+                    <span className="text-4xl font-bold text-purple-400 ml-2">{detectedLetter}</span>
+                  </motion.div>
+                ) : (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-gray-500"
+                  >
+                    {status === 'idle' ? 'Make a pose to see it detected!' : 'Waiting for pose...'}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
-          {/* Game panel */}
-          <div className="order-1 lg:order-2 space-y-6">
-            {/* Pre-game: Difficulty selection */}
+          {/* Right side - Game controls */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Welcome / Pre-game state */}
             {status === 'idle' && countdown === null && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="space-y-6"
               >
+                <div className="text-center lg:text-left">
+                  <h2 className="text-3xl font-bold text-white mb-2">Welcome to PoseMan</h2>
+                  <p className="text-gray-400">
+                    Click Start to begin the game. See your animated avatar on left. Good Luck :)
+                  </p>
+                </div>
+
                 <Card className="p-6">
-                  <h2 className="text-xl font-bold text-white mb-4">Select Difficulty</h2>
+                  <h3 className="font-semibold text-white mb-4">Select Difficulty</h3>
                   <DifficultySelector className="mb-6" />
 
-                  <div className="bg-gray-800/50 rounded-xl p-4 mb-6">
-                    <h3 className="font-semibold text-white mb-2">How to Play</h3>
-                    <ul className="text-sm text-gray-400 space-y-1">
-                      <li>Stand in front of your camera where your full body is visible</li>
-                      <li>Form letters with your body poses (T, Y, I, etc.)</li>
-                      <li>Guess the word before time runs out!</li>
-                    </ul>
-                  </div>
-
-                  <Button onClick={handleStart} size="lg" className="w-full">
+                  <Button
+                    onClick={handleStart}
+                    size="lg"
+                    className="w-full"
+                    disabled={!isAvatarReady}
+                  >
                     <Play className="w-5 h-5 mr-2" />
                     Start Game
                   </Button>
                 </Card>
+
+                {/* Instructions */}
+                <Card className="p-4 bg-gray-800/30">
+                  <h4 className="font-semibold text-white mb-2 text-sm">How to Play</h4>
+                  <ul className="text-sm text-gray-400 space-y-1">
+                    <li>• Stand where your full body is visible</li>
+                    <li>• Form letters with your body</li>
+                    <li>• Guess the word before time runs out!</li>
+                  </ul>
+                </Card>
               </motion.div>
             )}
-
-            {/* Countdown */}
-            <AnimatePresence>
-              {countdown !== null && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
-                >
-                  <motion.div
-                    key={countdown}
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 1.5, opacity: 0 }}
-                    className="text-9xl font-bold text-purple-500"
-                  >
-                    {countdown}
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Playing state */}
             {(status === 'playing' || status === 'paused') && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
                 className="space-y-6"
               >
-                {/* Timer and score */}
-                <Card className="p-4">
-                  <GameTimer className="mb-4" />
-                  <ScoreDisplay />
+                {/* Timer */}
+                <Card className="p-4 text-center">
+                  <GameTimer />
                 </Card>
 
-                {/* Word display */}
+                {/* Word to guess with image hint */}
                 <Card className="p-6">
+                  {currentWord?.imageUrl && (
+                    <div className="mb-4 flex justify-center">
+                      <div className="w-32 h-32 bg-gray-800 rounded-xl flex items-center justify-center">
+                        <span className="text-6xl">
+                          {/* Emoji based on word */}
+                          {currentWord.word === 'CAT' ? '🐱' :
+                           currentWord.word === 'DOG' ? '🐕' :
+                           currentWord.word === 'BAT' ? '🦇' :
+                           currentWord.word === 'SUN' ? '☀️' :
+                           currentWord.word === 'HAT' ? '🎩' :
+                           currentWord.word === 'TOY' ? '🧸' : '❓'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   <WordDisplay />
                 </Card>
 
+                {/* Score */}
+                <Card className="p-4">
+                  <ScoreDisplay />
+                </Card>
+
                 {/* Controls */}
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   {status === 'playing' ? (
-                    <Button onClick={pauseGame} variant="secondary" className="flex-1">
+                    <Button onClick={pauseGame} variant="outline" className="flex-1">
                       <Pause className="w-4 h-4 mr-2" />
                       Pause
                     </Button>
                   ) : (
-                    <Button onClick={resumeGame} variant="secondary" className="flex-1">
+                    <Button onClick={resumeGame} className="flex-1">
                       <Play className="w-4 h-4 mr-2" />
                       Resume
                     </Button>
                   )}
-                  <Button onClick={resetGame} variant="outline" className="flex-1">
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Restart
+                  <Button onClick={resetGame} variant="ghost">
+                    <RotateCcw className="w-4 h-4" />
                   </Button>
                 </div>
-
-                {/* Pose guide */}
-                <Card className="p-4">
-                  <h3 className="font-semibold text-white mb-3">Quick Pose Guide</h3>
-                  <div className="grid grid-cols-4 gap-2 text-center text-sm">
-                    <div className="bg-gray-800 rounded-lg p-2">
-                      <p className="text-2xl font-bold text-purple-400">T</p>
-                      <p className="text-gray-500">Arms out</p>
-                    </div>
-                    <div className="bg-gray-800 rounded-lg p-2">
-                      <p className="text-2xl font-bold text-purple-400">Y</p>
-                      <p className="text-gray-500">Arms up wide</p>
-                    </div>
-                    <div className="bg-gray-800 rounded-lg p-2">
-                      <p className="text-2xl font-bold text-purple-400">I</p>
-                      <p className="text-gray-500">Arms up straight</p>
-                    </div>
-                    <div className="bg-gray-800 rounded-lg p-2">
-                      <p className="text-2xl font-bold text-purple-400">A</p>
-                      <p className="text-gray-500">Hands together up</p>
-                    </div>
-                  </div>
-                </Card>
               </motion.div>
             )}
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Ready Set Go Animation - like original */}
+      <AnimatePresence>
+        {countdown !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          >
+            <motion.h1
+              key={countdown}
+              initial={{ scale: 0.5, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 1.5, opacity: 0, y: -50 }}
+              transition={{ type: 'spring', damping: 15 }}
+              className="text-7xl sm:text-9xl font-black text-white"
+              style={{ textShadow: '0 0 40px rgba(168, 85, 247, 0.5)' }}
+            >
+              {countdown}
+            </motion.h1>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Footer */}
+      <footer className="fixed bottom-0 left-0 right-0 p-4 text-center text-gray-500 text-sm">
+        <p>
+          PoseMan. Made with{' '}
+          <a href="https://www.tensorflow.org/js" className="text-white hover:text-purple-400">
+            TensorFlow.js
+          </a>{' '}
+          and{' '}
+          <a href="https://github.com/tensorflow/tfjs-models" className="text-white hover:text-purple-400">
+            MoveNet
+          </a>
+          .
+        </p>
+      </footer>
 
       {/* Game Over Modal */}
       <GameOverModal isOpen={showGameOver} onPlayAgain={handlePlayAgain} />

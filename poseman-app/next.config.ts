@@ -10,21 +10,30 @@ const nextConfig: NextConfig = {
     '@tensorflow-models/pose-detection',
   ],
 
-  // Webpack configuration for TensorFlow
+  // Webpack configuration for TensorFlow and Paper.js
   webpack: (config, { isServer }) => {
-    // Handle TensorFlow.js in browser only
+    // Handle browser-only modules
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
         path: false,
         crypto: false,
+        canvas: false,
       };
     }
 
-    // Ignore specific tensorflow warnings
+    // Ignore Paper.js Node.js modules (we only use browser version)
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'jsdom/lib/jsdom/living/generated/utils': false,
+      'jsdom': false,
+    };
+
+    // Ignore specific warnings
     config.ignoreWarnings = [
       { module: /@tensorflow/ },
+      { module: /paper/ },
     ];
 
     return config;
